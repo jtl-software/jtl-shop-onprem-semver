@@ -2,8 +2,8 @@
     "name"        : "mirkoschmidt/semver",
     "description" : "A decent, standards-compliant, Semantic Versioning (SemVer) parser and library",
     "keywords"    : ["semver", "semantic", "versioning"],
-    "homepage"    : "https://github.com/naneau/semver",
-    "time"        : "2013-01-04",
+    "homepage"    : "https://gitlab.jtl-software.de/mirkoschmidt/semver",
+    "time"        : "2018-08-21",
     "type"        : "library",
     "license"     : "MIT",
 
