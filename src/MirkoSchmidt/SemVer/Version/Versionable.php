@@ -55,8 +55,9 @@ abstract class Versionable
     /**
      * Set the major of the Version
      *
-     * @param  int     $major
-     * @return Version
+     * @param  int $major
+     *
+     * @return Versionable
      */
     public function setMajor($major)
     {
@@ -78,8 +79,9 @@ abstract class Versionable
     /**
      * Set the minor of the Version
      *
-     * @param  int     $minor
-     * @return Version
+     * @param  int $minor
+     *
+     * @return Versionable
      */
     public function setMinor($minor)
     {
@@ -101,8 +103,9 @@ abstract class Versionable
     /**
      * Set the patch of the version
      *
-     * @param  int     $patch
-     * @return Version
+     * @param  int $patch
+     *
+     * @return Versionable
      */
     public function setPatch($patch)
     {
@@ -114,12 +117,18 @@ abstract class Versionable
     /**
      * To strings
      *
-     * @return void
+     * @return string
      **/
     public function __toString()
     {
+        if ($this->getMajor() <= 4) {
+            $format = "%d.%02d.%d";
+        } else {
+            $format = "%d.%d.%d";
+        }
+
         return sprintf(
-            '%d.%d.%d',
+            $format,
             $this->getMajor(),
             $this->getMinor(),
             $this->getPatch()
