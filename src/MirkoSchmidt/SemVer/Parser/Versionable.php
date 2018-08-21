@@ -62,7 +62,7 @@ class Versionable
 
         // Versionable parts
         $versionable
-            ->setPraefix($praefix)
+            ->setPrefix($praefix)
             ->setMajor((int) $build)
             ->setMinor((int) $parts[1])
             ->setPatch((int) $parts[2]);
