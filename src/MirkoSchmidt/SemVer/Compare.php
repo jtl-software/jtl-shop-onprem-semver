@@ -52,6 +52,12 @@ class Compare
             throw new InvalidArgumentException('No versions given');
         }
 
+        // If the first argument is an array, use that
+        if (is_array($versions[0])) {
+            $versions = $versions[0];
+            $count = count($versions);
+        }
+
         // If there's only one, it is great. Very great.
         if ($count === 1) {
             return $versions[0];

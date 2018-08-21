@@ -74,7 +74,7 @@ class VersionRange
      *
      * @return void
      */
-    public function getRange(Versionable $startVersion, Versionable $targetVersion)
+    public function setVersionRange(Versionable $startVersion, Versionable $targetVersion)
     {
         $versionRange = [];
         $versionRange[] = $startVersion;
