@@ -22,6 +22,13 @@ namespace MirkoSchmidt\SemVer\Version;
 abstract class Versionable
 {
     /**
+     * Prefix of version
+     *
+     * @var int
+     **/
+    private $prefix = 0;
+
+    /**
      * Major version
      *
      * @var int
@@ -41,6 +48,30 @@ abstract class Versionable
      * @var int
      **/
     private $patch = 0;
+
+    /**
+     * Get the major of the Version
+     *
+     * @return int
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+
+    /**
+     * Set the major of the Version
+     *
+     * @param  int $prefix
+     *
+     * @return Versionable
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+
+        return $this;
+    }
 
     /**
      * Get the major of the Version
@@ -122,13 +153,14 @@ abstract class Versionable
     public function __toString()
     {
         if ($this->getMajor() <= 4) {
-            $format = "%d.%02d.%d";
+            $format = "%s%d.%02d.%d";
         } else {
-            $format = "%d.%d.%d";
+            $format = "%s%d.%d.%d";
         }
 
         return sprintf(
             $format,
+            $this->getPrefix(),
             $this->getMajor(),
             $this->getMinor(),
             $this->getPatch()

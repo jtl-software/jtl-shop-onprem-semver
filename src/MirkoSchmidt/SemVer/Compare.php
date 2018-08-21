@@ -8,7 +8,6 @@
 
 namespace MirkoSchmidt\SemVer;
 
-use MirkoSchmidt\SemVer\Version;
 use MirkoSchmidt\SemVer\Version\Versionable;
 use MirkoSchmidt\SemVer\Version\Build;
 use MirkoSchmidt\SemVer\Version\PreRelease;
@@ -38,12 +37,8 @@ class Compare
     /**
      * Get the greatest SemVer out of a set of Versions
      *
-     * @param  Version $v1
-     * @param  Version $v2
-     * ...
-     * @param  Version $vn
      * @return Version
-     **/
+     */
     public static function greatest()
     {
         // Versions given

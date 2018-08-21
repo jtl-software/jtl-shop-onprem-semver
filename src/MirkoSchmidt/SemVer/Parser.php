@@ -36,7 +36,7 @@ class Parser
      * @throws InvalidArgumentException
      *
      * @param string $string
-     * @return SemVerVersion
+     * @return Version\Versionable
      **/
     public static function parse($string)
     {

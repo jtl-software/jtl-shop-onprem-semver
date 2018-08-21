@@ -164,6 +164,7 @@ class Version extends Versionable
 
         $next = new Version;
 
+        $next->setPrefix($this->getPrefix());
         $next->setMajor($this->getMajor());
         $next->setMinor($this->getMinor());
         $next->setPatch($this->getPatch());
@@ -204,6 +205,7 @@ class Version extends Versionable
     {
         $version = new Version;
 
+        $version->setPrefix($this->getPrefix());
         $version->setMajor($this->getMajor());
         $version->setMinor($this->getMinor());
         $version->setPatch($this->getPatch());

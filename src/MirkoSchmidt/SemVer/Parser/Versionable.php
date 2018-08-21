@@ -56,9 +56,14 @@ class Versionable
             );
         }
 
+        preg_match('/^([a-z])?([0-9])+$/', $parts[0], $m);
+        $praefix = $m[1];
+        $build   = $m[2];
+
         // Versionable parts
         $versionable
-            ->setMajor((int) $parts[0])
+            ->setPraefix($praefix)
+            ->setMajor((int) $build)
             ->setMinor((int) $parts[1])
             ->setPatch((int) $parts[2]);
 
