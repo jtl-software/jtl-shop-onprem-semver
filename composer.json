@@ -9,12 +9,6 @@
 
     "authors": [
         {
-            "name"     : "Maurice Fonk",
-            "email"    : "maurice@naneau.net",
-            "homepage" : "http://mauricefonk.com",
-            "role"     : "developer"
-        },
-        {
             "name"     : "Mirko Schmidt",
             "email"    : "mirko.schmidt@jtl-software.com",
             "role"     : "developer"
@@ -22,7 +16,7 @@
     ],
 
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.6.0"
     },
 
     "require-dev": {

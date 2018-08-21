@@ -36,7 +36,7 @@ class Versionable
     public static function parse($string, $className)
     {
         // Sanity check
-        if (substr_count($string, '.') !== 2) {
+        if (substr_count($string, '.') < 1 && substr_count($string, '.') > 2) {
             throw new InvalidArgumentException(
                 'part "' . $string . '" can not be parsed into a SemVer'
                 . ' major.minor.patch version'
@@ -56,16 +56,23 @@ class Versionable
             );
         }
 
+        // Set prefix, if it exists
         preg_match('/^([a-z])?([0-9])+$/', $parts[0], $m);
-        $praefix = $m[1];
+        $praefix = !empty($m[1]) ? $m[1] : null;
         $build   = $m[2];
+
+        // Check if patch exists
+        if (isset($parts[2])) {
+            $versionable->setPatch((int) $parts[2]);
+        } else {
+            $versionable->setSelectLastPatch(true);
+        }
 
         // Versionable parts
         $versionable
             ->setPrefix($praefix)
             ->setMajor((int) $build)
-            ->setMinor((int) $parts[1])
-            ->setPatch((int) $parts[2]);
+            ->setMinor((int) $parts[1]);
 
         return $versionable;
     }

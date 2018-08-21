@@ -29,7 +29,7 @@ class PreRelease
      * Parse pre release version string
      *
      * @param string
-     * @return PreReleaseVersion
+     * @return PreReleaseVersion|\MirkoSchmidt\SemVer\Version\Versionable
      **/
     public static function parse($string)
     {

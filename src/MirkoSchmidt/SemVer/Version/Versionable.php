@@ -26,7 +26,7 @@ abstract class Versionable
      *
      * @var int
      **/
-    private $prefix = 0;
+    private $prefix = null;
 
     /**
      * Major version
@@ -48,6 +48,11 @@ abstract class Versionable
      * @var int
      **/
     private $patch = 0;
+
+    /**
+     * @var bool
+     */
+    private $selectLastPatch = false;
 
     /**
      * Get the major of the Version
@@ -141,6 +146,26 @@ abstract class Versionable
     public function setPatch($patch)
     {
         $this->patch = $patch;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSelectLastPatch()
+    {
+        return $this->selectLastPatch;
+    }
+
+    /**
+     * @param bool $selectLastPatch
+     *
+     * @return Versionable
+     */
+    public function setSelectLastPatch($selectLastPatch)
+    {
+        $this->selectLastPatch = $selectLastPatch;
 
         return $this;
     }
