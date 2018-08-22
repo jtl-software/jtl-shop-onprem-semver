@@ -2,12 +2,12 @@
 /**
  * Build.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Version
  */
 
-namespace MirkoSchmidt\SemVer\Version;
+namespace JTLShop\SemVer\Version;
 
 use \InvalidArgumentException;
 
@@ -16,7 +16,7 @@ use \InvalidArgumentException;
  *
  * Build part
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Version
  */

@@ -1,7 +1,7 @@
 <?php
 
-use MirkoSchmidt\SemVer\Compare;
-use MirkoSchmidt\SemVer\Parser;
+use JTLShop\SemVer\Compare;
+use JTLShop\SemVer\Parser;
 
 use \PHPUnit_Framework_TestCase as TestCase;
 
@@ -10,7 +10,7 @@ use \PHPUnit_Framework_TestCase as TestCase;
  *
  * Testing the Compare class
  *
- * @category      MirkoSchmidt
+ * @category      Naneau
  * @package       SemVer
  * @subpackage    Tests
 **/

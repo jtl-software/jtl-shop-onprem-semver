@@ -2,11 +2,11 @@
 /**
  * Regex.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 
-namespace MirkoSchmidt\SemVer;
+namespace JTLShop\SemVer;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
@@ -15,7 +15,7 @@ use \InvalidArgumentException as InvalidArgumentException;
  *
  * Regex matching and parsing for SemVer strings
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 class Regex

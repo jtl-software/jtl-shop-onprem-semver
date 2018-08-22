@@ -2,19 +2,19 @@
 /**
  * PreRelease.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Version
  */
 
-namespace MirkoSchmidt\SemVer\Version;
+namespace JTLShop\SemVer\Version;
 
 /**
  * PreRelease
  *
  * Pre release version status
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Version
  */

@@ -2,16 +2,16 @@
 /**
  * Version.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Version
  */
 
-namespace MirkoSchmidt\SemVer;
+namespace JTLShop\SemVer;
 
-use MirkoSchmidt\SemVer\Version\Versionable;
-use MirkoSchmidt\SemVer\Version\Build;
-use MirkoSchmidt\SemVer\Version\PreRelease;
+use JTLShop\SemVer\Version\Versionable;
+use JTLShop\SemVer\Version\Build;
+use JTLShop\SemVer\Version\PreRelease;
 use InvalidArgumentException;
 
 /**
@@ -19,7 +19,7 @@ use InvalidArgumentException;
  *
  * A single SemVer version
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Version
  */

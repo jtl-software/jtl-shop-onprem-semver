@@ -5,11 +5,11 @@
  * Bootstrap for PHPUnit
  */
 
-// MirkoSchmidt Autoloader
+// Naneau Autoloader
 spl_autoload_register(function ($className) {
 
     // Only load "Abc" classes
-    if (substr($className, 0, 6) !== 'MirkoSchmidt') {
+    if (substr($className, 0, 6) !== 'JTLShop') {
         return false;
     }
 

@@ -2,12 +2,12 @@
 /**
  * Versionable.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Version
  */
 
-namespace MirkoSchmidt\SemVer\Version;
+namespace JTLShop\SemVer\Version;
 
 /**
  * Versionable
@@ -15,7 +15,7 @@ namespace MirkoSchmidt\SemVer\Version;
  * Versionable class, both the main SemVer version as well as pre-release parts
  * can contain X.Y.Z version numbers
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Version
  */

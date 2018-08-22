@@ -2,15 +2,15 @@
 /**
  * Compare.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 
-namespace MirkoSchmidt\SemVer;
+namespace JTLShop\SemVer;
 
-use MirkoSchmidt\SemVer\Version\Versionable;
-use MirkoSchmidt\SemVer\Version\Build;
-use MirkoSchmidt\SemVer\Version\PreRelease;
+use JTLShop\SemVer\Version\Versionable;
+use JTLShop\SemVer\Version\Build;
+use JTLShop\SemVer\Version\PreRelease;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
@@ -19,9 +19,9 @@ use \InvalidArgumentException as InvalidArgumentException;
  *
  * Comparisons and functions around SemVer versions
  *
- * @see MirkoSchmidt\SemVer\Version
+ * @see JTLShop\SemVer\Version
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 class Compare
@@ -76,7 +76,7 @@ class Compare
         // Recurse if there's versions left
         if (count($versions) > 0) {
             return call_user_func_array(
-                array('MirkoSchmidt\SemVer\Compare', 'greatest'),
+                array('JTLShop\SemVer\Compare', 'greatest'),
                 array_merge(
                     array($greatest),
                     $versions

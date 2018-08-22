@@ -2,20 +2,20 @@
 /**
  * VersionRange.php
  *
- * @category        MirkoSchmidt
+ * @category        JTLShop
  * @package         SemVer
  */
 
-namespace MirkoSchmidt\SemVer;
+namespace JTLShop\SemVer;
 
-use MirkoSchmidt\SemVer\Version\Versionable;
+use JTLShop\SemVer\Version\Versionable;
 
 /**
  * Sort
  *
  * Sorting sets of SemVer Versions
  *
- * @category        MirkoSchmidt
+ * @category        JTLShop
  * @package         SemVer
  */
 class VersionRange

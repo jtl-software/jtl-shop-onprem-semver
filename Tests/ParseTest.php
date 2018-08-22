@@ -1,6 +1,6 @@
 <?php
 
-use MirkoSchmidt\SemVer\Parser;
+use JTLShop\SemVer\Parser;
 
 use \PHPUnit_Framework_TestCase as TestCase;
 
@@ -9,7 +9,7 @@ use \PHPUnit_Framework_TestCase as TestCase;
  *
  * Testing the parsers
  *
- * @category      MirkoSchmidt
+ * @category      Naneau
  * @package       SemVer
  * @subpackage    Tests
 **/

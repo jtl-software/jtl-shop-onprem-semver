@@ -1,16 +1,22 @@
 {
-    "name"        : "mirkoschmidt/semver",
+    "name"        : "jtlshop/semver",
     "description" : "A decent, standards-compliant, Semantic Versioning (SemVer) parser and library",
     "keywords"    : ["semver", "semantic", "versioning"],
-    "homepage"    : "https://gitlab.jtl-software.de/mirkoschmidt/semver",
+    "homepage"    : "https://gitlab.jtl-software.de/jtlshop/semver",
     "time"        : "2018-08-21",
     "type"        : "library",
     "license"     : "MIT",
 
     "authors": [
         {
-            "name"     : "Mirko Schmidt",
-            "email"    : "mirko.schmidt@jtl-software.com",
+            "name"     : "Maurice Fonk",
+            "email"    : "maurice@naneau.net",
+            "homepage" : "http://mauricefonk.com",
+            "role"     : "developer"
+        },
+        {
+            "name"     : "JTL-Software-GmbH",
+            "email"    : "teamshop@jtl-software.com",
             "role"     : "developer"
         }
     ],
@@ -25,7 +31,7 @@
 
     "autoload": {
         "psr-0": {
-            "MirkoSchmidt\\SemVer\\": "src"
+            "JTLShop\\SemVer\\": "src"
         }
     }
 }

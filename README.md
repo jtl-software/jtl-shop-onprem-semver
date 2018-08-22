@@ -18,7 +18,7 @@ Parsing strings into SemVer Versions is easy:
 ```php
 <?php
 
-use MirkoSchmidt\SemVer\Parser;
+use JTLShop\SemVer\Parser;
 
 // Parse a SemVer string
 $version = Parser::parse('1.2.3-alpha.1+build.12345.ea4f51');
@@ -52,8 +52,8 @@ Comparing two versions is easy:
 ```php
 <?php
 
-use MirkoSchmidt\SemVer\Parser;
-use MirkoSchmidt\SemVer\Compare;
+use JTLShop\SemVer\Parser;
+use JTLShop\SemVer\Compare;
 
 Compare::greaterThan(
     Parser::parse('1.2.1-beta'),
@@ -80,7 +80,7 @@ descending order of SemVer:
 ```php
 <?php
 
-use MirkoSchmidt\SemVer\Sort;
+use JTLShop\SemVer\Sort;
 
 $sorted = Sort::sort('1.2.1-beta', '1.2.0+build.10', '0.9.29');
 

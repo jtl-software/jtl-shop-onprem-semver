@@ -2,14 +2,14 @@
 /**
  * Sort.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 
-namespace MirkoSchmidt\SemVer;
+namespace JTLShop\SemVer;
 
-use MirkoSchmidt\SemVer\Parser;
-use MirkoSchmidt\SemVer\Version;
+use JTLShop\SemVer\Parser;
+use JTLShop\SemVer\Version;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
@@ -18,7 +18,7 @@ use \InvalidArgumentException as InvalidArgumentException;
  *
  * Sorting sets of SemVer Versions
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 class Sort

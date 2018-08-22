@@ -2,16 +2,16 @@
 /**
  * PreRelease.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Parser
  */
 
-namespace MirkoSchmidt\SemVer\Parser;
+namespace JTLShop\SemVer\Parser;
 
-use MirkoSchmidt\SemVer\Parser\Versionable as VersionableParser;
+use JTLShop\SemVer\Parser\Versionable as VersionableParser;
 
-use MirkoSchmidt\SemVer\Version\PreRelease as PreReleaseVersion;
+use JTLShop\SemVer\Version\PreRelease as PreReleaseVersion;
 
 /**
  * PreRelease
@@ -19,7 +19,7 @@ use MirkoSchmidt\SemVer\Version\PreRelease as PreReleaseVersion;
  * PreRelease part parser uses Versionable parser for most of the grunt work,
  * but parses "greek" name, etc. as well.
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Parser
  */
@@ -29,13 +29,13 @@ class PreRelease
      * Parse pre release version string
      *
      * @param string
-     * @return PreReleaseVersion|\MirkoSchmidt\SemVer\Version\Versionable
+     * @return PreReleaseVersion|\JTLShop\SemVer\Version\Versionable
      **/
     public static function parse($string)
     {
         // Type X.Y.Z, can be parsed as Versionable
         if (substr_count($string, '.') === 2) {
-            return VersionableParser::parse($string, 'MirkoSchmidt\SemVer\Version\PreRelease');
+            return VersionableParser::parse($string, 'JTLShop\SemVer\Version\PreRelease');
         }
 
         $preRelease = new PreReleaseVersion;

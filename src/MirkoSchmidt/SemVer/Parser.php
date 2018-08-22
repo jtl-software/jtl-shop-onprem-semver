@@ -2,20 +2,20 @@
 /**
  * Parser.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Parser
  */
 
-namespace MirkoSchmidt\SemVer;
+namespace JTLShop\SemVer;
 
-use MirkoSchmidt\SemVer\Parser\Build as BuildParser;
-use MirkoSchmidt\SemVer\Parser\PreRelease as PreReleaseParser;
-use MirkoSchmidt\SemVer\Parser\Versionable as VersionableParser;
+use JTLShop\SemVer\Parser\Build as BuildParser;
+use JTLShop\SemVer\Parser\PreRelease as PreReleaseParser;
+use JTLShop\SemVer\Parser\Versionable as VersionableParser;
 
-use MirkoSchmidt\SemVer\Regex;
+use JTLShop\SemVer\Regex;
 
-use MirkoSchmidt\SemVer\Version as SemVerVersion;
+use JTLShop\SemVer\Version as SemVerVersion;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
@@ -24,7 +24,7 @@ use \InvalidArgumentException as InvalidArgumentException;
  *
  * Full SemVer version parser
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Parser
  */
@@ -45,7 +45,7 @@ class Parser
         // Parse the SemVer root
         $version = VersionableParser::parse(
             $matches[1],
-            'MirkoSchmidt\SemVer\Version'
+            'JTLShop\SemVer\Version'
         );
 
         // There is a pre-release part

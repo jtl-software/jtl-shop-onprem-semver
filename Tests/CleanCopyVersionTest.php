@@ -2,11 +2,11 @@
 /**
  * CleanCopyVersionTest.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 
-use MirkoSchmidt\SemVer\Parser;
+use JTLShop\SemVer\Parser;
 
 use \PHPUnit_Framework_TestCase as TestCase;
 
@@ -15,7 +15,7 @@ use \PHPUnit_Framework_TestCase as TestCase;
  *
  * Testing Version::cleanCopy()
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 class CleanCopyVersionTest extends TestCase

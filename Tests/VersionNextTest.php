@@ -2,12 +2,12 @@
 /**
  * VersionNextTest.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 
-use MirkoSchmidt\SemVer\Parser;
-use MirkoSchmidt\SemVer\Version;
+use JTLShop\SemVer\Parser;
+use JTLShop\SemVer\Version;
 
 use \PHPUnit_Framework_TestCase as TestCase;
 
@@ -16,7 +16,7 @@ use \PHPUnit_Framework_TestCase as TestCase;
  *
  * Testing retrieving the next Version from a Version
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 class VersionNextTest extends TestCase

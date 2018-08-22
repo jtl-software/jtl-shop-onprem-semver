@@ -2,21 +2,21 @@
 /**
  * Build.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Parser
  */
 
-namespace MirkoSchmidt\SemVer\Parser;
+namespace JTLShop\SemVer\Parser;
 
-use MirkoSchmidt\SemVer\Version\Build as BuildVersion;
+use JTLShop\SemVer\Version\Build as BuildVersion;
 
 /**
  * Build
  *
  * Build string parser
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Parser
  */

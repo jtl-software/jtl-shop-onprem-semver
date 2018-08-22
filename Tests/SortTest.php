@@ -2,12 +2,12 @@
 /**
  * SortTest.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 
-use MirkoSchmidt\SemVer\Parser;
-use MirkoSchmidt\SemVer\Sort as Sorter;
+use JTLShop\SemVer\Parser;
+use JTLShop\SemVer\Sort as Sorter;
 
 use \PHPUnit_Framework_TestCase as TestCase;
 
@@ -16,7 +16,7 @@ use \PHPUnit_Framework_TestCase as TestCase;
  *
  * Testing SemVer sorting
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  */
 class SortTest extends TestCase

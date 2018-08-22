@@ -2,14 +2,14 @@
 /**
  * Versionable.php
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Parser
  */
 
-namespace MirkoSchmidt\SemVer\Parser;
+namespace JTLShop\SemVer\Parser;
 
-use MirkoSchmidt\SemVer\Version\Versionable as VersionableVersion;
+use JTLShop\SemVer\Version\Versionable as VersionableVersion;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
@@ -18,7 +18,7 @@ use \InvalidArgumentException as InvalidArgumentException;
  *
  * Parses strings in form X.Y.Z into major, minor, patch of Versionable
  *
- * @category        MirkoSchmidt
+ * @category        Naneau
  * @package         SemVer
  * @subpackage      Parser
  */
