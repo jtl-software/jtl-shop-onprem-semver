@@ -74,10 +74,14 @@ class VersionRange
      *
      * @return void
      */
-    public function setVersionRange(Versionable $startVersion, Versionable $targetVersion)
+    public function setVersionRange(Versionable $startVersion, Versionable $targetVersion = null)
     {
-        $versionRange = [];
+        $versionRange   = [];
         $versionRange[] = $startVersion;
+
+        if (empty($targetVersion)) {
+            $targetVersion = end($this->versions);
+        }
 
         $versions = Sort::sortArray($this->versions);
 
