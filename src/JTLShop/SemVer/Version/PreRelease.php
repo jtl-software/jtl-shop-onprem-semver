@@ -35,16 +35,6 @@ class PreRelease extends Versionable
     private $releaseNumber = 0;
 
     /**
-     * Get the "greek" name of the pre-release status
-     *
-     * @return string
-     */
-    public function getGreek()
-    {
-        return $this->greek;
-    }
-
-    /**
      * Set the "greek" name of the pre-release status
      *
      * @param string $greek
@@ -58,16 +48,6 @@ class PreRelease extends Versionable
     }
 
     /**
-     * Get the release number
-     *
-     * @return int
-     */
-    public function getReleaseNumber()
-    {
-        return $this->releaseNumber;
-    }
-
-    /**
      * Set the release number
      *
      * @param int $releaseNumber
@@ -78,6 +58,26 @@ class PreRelease extends Versionable
         $this->releaseNumber = $releaseNumber;
 
         return $this;
+    }
+
+    /**
+     * Get the "greek" name of the pre-release status
+     *
+     * @return string
+     */
+    public function getGreek()
+    {
+        return $this->greek;
+    }
+
+    /**
+     * Get the release number
+     *
+     * @return int
+     */
+    public function getReleaseNumber()
+    {
+        return $this->releaseNumber;
     }
 
     /**

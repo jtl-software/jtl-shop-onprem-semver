@@ -23,9 +23,9 @@ class ParseTest extends TestCase
     public function testVersionable()
     {
         $v1 = Parser::parse('0.1.1-rc.1');
-        $v2 = Parser::parse('5.2.0+build.269.1244d66');
         $v2 = Parser::parse('1.111.2-alpha.1235+build.4');
         $v3 = Parser::parse('20.0.123+build.6');
+        $v4 = \JTLShop\SemVer\Version::parse(406);
 
         // Major
         $this->assertEquals(
@@ -42,6 +42,11 @@ class ParseTest extends TestCase
             $v3->getMajor(),
             20,
             'Major should parse'
+        );
+        $this->assertEquals(
+            $v4->getMajor(),
+            4,
+            'v4 Major should parse'
         );
 
         // Minor
@@ -60,6 +65,11 @@ class ParseTest extends TestCase
             0,
             'Minor should parse'
         );
+        $this->assertEquals(
+            $v4->getMinor(),
+            6,
+            'v4 Minor should parse'
+        );
 
         // Patch
         $this->assertEquals(
@@ -76,6 +86,11 @@ class ParseTest extends TestCase
             $v3->getPatch(),
             123,
             'Patch should parse'
+        );
+        $this->assertEquals(
+            $v4->getPatch(),
+            0,
+            'v4 Patch should parse'
         );
     }
 
@@ -162,8 +177,8 @@ class ParseTest extends TestCase
             Parser::parse('0.0.1-0.1.123')->getPreRelease()->getGreek()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-0.1.123')->getPreRelease()->getReleaseNumber(),
-            0
+            Parser::parse('0.0.1-0.1.123')->getPreRelease()->__toString(),
+            '0.1.123'
         );
     }
 

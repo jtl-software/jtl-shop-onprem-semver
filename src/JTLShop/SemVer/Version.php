@@ -175,9 +175,14 @@ class Version extends Versionable
                 // and we won't be jumping to the next greek value. So it is
                 // safe use $this prerelease and just increment the release
                 // number.
-                $pre = new PreRelease;
-                $pre->setGreek($this->getPreRelease()->getGreek());
-                $pre->setReleaseNumber($this->getPreRelease()->getReleaseNumber() + 1);
+                $preRelease = $this->getPreRelease();
+                $pre        = new PreRelease;
+                if (!empty($preRelease->getGreek())) {
+                    $pre->setGreek($preRelease->getGreek());
+                    $pre->setReleaseNumber($preRelease->getReleaseNumber() + 1);
+                } else {
+                    $pre->setPatch($preRelease->getPatch() + 1);
+                }
 
                 $next->setPreRelease($pre);
             }
@@ -239,4 +244,61 @@ class Version extends Versionable
         return $string;
     }
 
+    /**
+     * Parse a new version or return an existing version
+     *
+     * @param Version|string $version
+     *
+     * @return Version
+     */
+    public static function parse($version)
+    {
+        if ($version instanceof self) {
+            return $version;
+        } else {
+            return Parser::parse($version);
+        }
+    }
+
+    /**
+     * Check if the version is greater than another version
+     *
+     * @param Version|string $v2
+     *
+     * @return bool
+     */
+    public function greaterThan($v2)
+    {
+        $v2 = self::parse($v2);
+
+        return Compare::greaterThan($this, $v2);
+    }
+
+    /**
+     * Check if the version is smaller than another version
+     *
+     * @param Version|string $v2
+     *
+     * @return bool
+     */
+    public function smallerThan($v2)
+    {
+        $v2 = self::parse($v2);
+
+        return Compare::smallerThan($this, $v2);
+    }
+
+    /**
+     * Check if the version is equals to another version
+     *
+     * @param Version|string $v2
+     *
+     * @return bool
+     */
+    public function equals($v2)
+    {
+        $v2 = self::parse($v2);
+
+        return Compare::equals($this, $v2);
+    }
 }
