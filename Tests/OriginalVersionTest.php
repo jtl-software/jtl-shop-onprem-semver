@@ -27,11 +27,13 @@ class OriginalVersionTest extends TestCase
      **/
     public function testStoreOriginalVersion()
     {
-        $version = Parser::parse('0.0.0');
+        $version  = Parser::parse('0.0.0');
+        $version2 = \JTLShop\SemVer\Version::parse(406);
 
         $version->setMinor(1);
 
         $this->assertEquals('0.0.0', $version->getOriginalVersion());
         $this->assertEquals('0.1.0', (string) $version);
+        $this->assertEquals('4.06.0', (string) $version2);
     }
 }
