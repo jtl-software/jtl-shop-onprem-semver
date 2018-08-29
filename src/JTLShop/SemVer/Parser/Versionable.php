@@ -33,7 +33,7 @@ class Versionable
      *
      * @param  string             $string
      * @param  string             $className
-     * @return Version
+     * @return Version|PreRelease|Build
      **/
     public static function parse($string, $className)
     {
