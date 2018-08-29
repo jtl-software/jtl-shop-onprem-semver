@@ -32,7 +32,7 @@ echo $version->getPatch(); // => 3
 if ($version->hasPreRelease()) {
     echo $version->getPreRelease()->getGreek(); // => alpha
     echo $version->getPreRelease()->getReleaseNumber(); // => 1
-    echo $version->getPreRelease() // => alpha.1
+    echo $version->getPreRelease(); // => alpha.1
 }
 
 // Build part ('+build.12345')

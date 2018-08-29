@@ -12,11 +12,6 @@ namespace JTLShop\SemVer;
 use JTLShop\SemVer\Parser\Build as BuildParser;
 use JTLShop\SemVer\Parser\PreRelease as PreReleaseParser;
 use JTLShop\SemVer\Parser\Versionable as VersionableParser;
-
-use JTLShop\SemVer\Regex;
-
-use JTLShop\SemVer\Version as SemVerVersion;
-
 use \InvalidArgumentException as InvalidArgumentException;
 
 /**
@@ -33,10 +28,10 @@ class Parser
     /**
      * Parse a string into a SemVer Version
      *
-     * @throws InvalidArgumentException
-     *
      * @param string $string
-     * @return Version\Versionable
+     *
+     * @return Version
+     * @throws InvalidArgumentException
      **/
     public static function parse($string)
     {
@@ -68,6 +63,7 @@ class Parser
 
         // Return
         $version->setOriginalVersion($string);
+
         return $version;
     }
 }

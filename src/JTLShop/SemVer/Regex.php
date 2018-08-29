@@ -25,7 +25,9 @@ class Regex
      *
      * @var string
      **/
-    private static $version = '/^(?<version>v?[0-9]+\.[0-9]+(?:\.[0-9]+)?)(?<prerelease>-[0-9a-zA-Z.]+)?(?<build>\+[0-9a-zA-Z.]+)?$/';
+    private static $versionStr = '/^(?<version>v?[0-9]+\.[0-9]+(?:\.[0-9]+)?)(?<prerelease>-[0-9a-zA-Z.]+)?(?<build>\+[0-9a-zA-Z.]+)?$/';
+
+    private static $versionNum = '/^(?<version>(\d)(\d{2})(\d{1})?)$/';
 
     /**
      * Match a SemVer using a regex
@@ -48,17 +50,29 @@ class Regex
         $matches = array();
 
         // Match the possible parts of a SemVer
-        $matched = preg_match(
-            self::$version,
+        $matchedStr = preg_match(
+            self::$versionStr,
             $string,
             $matches
         );
 
-        // No match, invalid
-        if (!$matched) {
-            throw new InvalidArgumentException(
-                '"' . $string . '" is not a valid SemVer'
+        if  (!$matchedStr) {
+            // Match the possible parts of a SemVer
+            $matchedNum = preg_match(
+                self::$versionNum,
+                $string,
+                $matches
             );
+
+            if (!$matchedNum) {
+                throw new InvalidArgumentException(
+                    '"' . $string . '" is not a valid SemVer'
+                );
+            }
+
+            $patch = isset($matches[4]) ? $matches[4] : 0;
+
+            return ['version' => $matches['version'], $matches[0], $matches[2].'.'.$matches[3].'.'.$patch];
         }
 
         // Return matched array

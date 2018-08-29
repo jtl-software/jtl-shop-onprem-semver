@@ -177,7 +177,7 @@ abstract class Versionable
      **/
     public function __toString()
     {
-        if ($this->getMajor() <= 4) {
+        if ($this->getMajor() === 4 || $this->getMajor() === 3) {
             $format = "%s%d.%02d.%d";
         } else {
             $format = "%s%d.%d.%d";

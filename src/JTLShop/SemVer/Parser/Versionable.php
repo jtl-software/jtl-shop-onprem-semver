@@ -9,7 +9,9 @@
 
 namespace JTLShop\SemVer\Parser;
 
-use JTLShop\SemVer\Version\Versionable as VersionableVersion;
+use JTLShop\SemVer\Version;
+use JTLShop\SemVer\Version\Build;
+use JTLShop\SemVer\Version\PreRelease;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
@@ -31,7 +33,7 @@ class Versionable
      *
      * @param  string             $string
      * @param  string             $className
-     * @return VersionableVersion
+     * @return Version
      **/
     public static function parse($string, $className)
     {
@@ -50,14 +52,14 @@ class Versionable
         $versionable = new $className;
 
         // Sanity check of class type
-        if (!($versionable instanceof VersionableVersion)) {
+        if (!($versionable instanceof Version || $versionable instanceof PreRelease || $versionable instanceof Build)) {
             throw new InvalidArgumentException(
-                '"' . $className . '" is not Versionable'
+                '"' . $className . '" is not Version'
             );
         }
 
         // Set prefix, if it exists
-        preg_match('/^([a-z])?([0-9])+$/', $parts[0], $m);
+        preg_match('/^([a-z])?([0-9]+)$/', $parts[0], $m);
         $praefix = !empty($m[1]) ? $m[1] : null;
         $build   = $m[2];
 
