@@ -70,9 +70,13 @@ class Regex
                 );
             }
 
-            $patch = isset($matches[4]) ? $matches[4] : 0;
+            $fullString = $matches[2].'.'.$matches[3];
 
-            return ['version' => $matches['version'], $matches[0], $matches[2].'.'.$matches[3].'.'.$patch];
+            if (isset($matches[4])) {
+                $fullString .= '.'.$matches[4];
+            }
+
+            return ['version' => $matches['version'], $matches[0], $fullString];
         }
 
         // Return matched array
