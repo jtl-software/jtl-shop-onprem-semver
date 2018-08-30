@@ -41,6 +41,16 @@ class VersionCollection extends \ArrayIterator
     }
 
     /**
+     * @param Version|string $value
+     */
+    public function append($value)
+    {
+        $value = Version::parse($value);
+
+        parent::append($value);
+    }
+
+    /**
      * @param Version|string $version
      *
      * @return mixed|null
@@ -98,5 +108,72 @@ class VersionCollection extends \ArrayIterator
         }
 
         return new self($relatedVersions);
+    }
+
+    /**
+     * @param string|int|Version $start
+     * @param string|int|Version $end
+     *
+     * @return VersionCollection
+     */
+    public function getVersionRange($start, $end)
+    {
+        $startKey = 0;
+        $endKey = 0;
+
+        foreach ($this as $key => $version) {
+            if ($version->equals(Version::parse($start))) {
+                $startKey = $key;
+            }
+            if ($version->equals(Version::parse($end))) {
+                $endKey = $key;
+            }
+        }
+
+        if ($startKey === $endKey) {
+            return new self();
+        }
+        $arr = [];
+        foreach ($this as $key => $version) {
+            if ($key >= $startKey && $key <= $endKey) {
+                $arr[] = $version;
+            }
+        }
+
+        return new self($arr);
+    }
+
+    /**
+     * @param Version|string $version
+     *
+     * @return bool
+     */
+    public function versionExists($version)
+    {
+        $exists = false;
+
+        array_walk($this->getArrayCopy(), function ($item) use (&$exists, $version) {
+            if ($item->equals($version)) {
+                $exists = true;
+            }
+        });
+
+        return $exists;
+    }
+
+    /**
+     * @param $currentVersion
+     *
+     * @return Version|string|null
+     */
+    public function getNextVersion($currentVersion)
+    {
+        foreach ($this as $key => $version) {
+            if ($version->equals($currentVersion)) {
+                return isset($this[($key + 1)]) ? $this[($key + 1)] : null;
+            }
+        }
+
+        return null;
     }
 }
