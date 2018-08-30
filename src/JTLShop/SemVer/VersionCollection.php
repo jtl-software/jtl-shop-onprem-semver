@@ -1,6 +1,6 @@
 <?php
 /**
- * VersionRange.php
+ * VersionCollection.php
  *
  * @category        JTLShop
  * @package         SemVer
