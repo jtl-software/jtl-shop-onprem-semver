@@ -152,7 +152,7 @@ class VersionCollection extends \ArrayIterator
     {
         $exists = false;
 
-        array_walk($this->getArrayCopy(), function ($item) use (&$exists, $version) {
+        array_walk($this->getArrayCopy(), function (Version $item) use (&$exists, $version) {
             if ($item->equals($version)) {
                 $exists = true;
             }
