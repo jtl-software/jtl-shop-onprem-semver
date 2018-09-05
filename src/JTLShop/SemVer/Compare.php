@@ -19,7 +19,7 @@ use \InvalidArgumentException as InvalidArgumentException;
  *
  * Comparisons and functions around SemVer versions
  *
- * @see JTLShop\SemVer\Version
+ * @see \JTLShop\SemVer\Version
  *
  * @category        Naneau
  * @package         SemVer

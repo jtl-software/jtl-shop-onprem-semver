@@ -91,6 +91,12 @@ class PreRelease extends Versionable
             return parent::__toString();
         }
 
-        return $this->getGreek() . '.' . $this->getReleaseNumber();
+        $preReleaseStr = $this->getGreek();
+
+        if ($this->getReleaseNumber() > 0) {
+            $preReleaseStr .= '.'.$this->getReleaseNumber();
+        }
+
+        return $preReleaseStr;
     }
 }
