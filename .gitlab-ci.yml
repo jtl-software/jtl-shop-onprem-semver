@@ -9,7 +9,7 @@ build:
   - docker:stable-dind
   script:
   - setup_docker
-  - -x build
+  - build
   only:
   - branches
 
