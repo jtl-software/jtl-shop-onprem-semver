@@ -34,6 +34,10 @@ test:
 # ---------------------------------------------------------------------------
 
 .auto_devops: &auto_devops |
+  export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
+  export CI_APPLICATION_TAG=$CI_COMMIT_SHA
+  export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
+
   function setup_docker() {
     if ! docker info &>/dev/null; then
       if [ -z "$DOCKER_HOST" -a "$KUBERNETES_PORT" ]; then
@@ -48,7 +52,7 @@ test:
   function build() {
     if [[ -n "$CI_USER_VAR" ]]; then
       echo "Logging to GitLab Container Registry with CI credentials..."
-      echo "Container: /jtlshop/semver | Repo: $CI_APPLICATION_REPOSITORY | Tag: $CI_APPLICATION_TAG"
+      echo "Container: $CI_CONTAINER_NAME | Repo: $CI_APPLICATION_REPOSITORY | Tag: $CI_APPLICATION_TAG"
       docker login -u "$CI_USER_VAR" -p "$CI_USER_PW_VAR" "$CI_REGISTRY"
       echo ""
     fi
@@ -77,16 +81,16 @@ test:
         -e ftp_proxy \
         -e NO_PROXY \
         -e no_proxy \
-        --name="/jtlshop/semver" -v "$(pwd):/tmp/app:ro" gliderlabs/herokuish /bin/herokuish buildpack build
-      echo "/jtlshop/semver" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
-      docker commit "/jtlshop/semver" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
-      docker rm "/jtlshop/semver" >/dev/null
+        --name="$CI_CONTAINER_NAME" -v "$(pwd):/tmp/app:ro" gliderlabs/herokuish /bin/herokuish buildpack build
+      echo "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
+      docker commit "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
+      docker rm "$CI_CONTAINER_NAME" >/dev/null
       echo ""
 
       echo "Configuring $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG docker image..."
-      docker create --expose 5000 --env PORT=5000 --name="/jtlshop/semver" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG" /bin/herokuish procfile start web
-      docker commit "/jtlshop/semver" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
-      docker rm "/jtlshop/semver" >/dev/null
+      docker create --expose 5000 --env PORT=5000 --name="$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG" /bin/herokuish procfile start web
+      docker commit "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
+      docker rm "$CI_CONTAINER_NAME" >/dev/null
       echo ""
     fi
 
