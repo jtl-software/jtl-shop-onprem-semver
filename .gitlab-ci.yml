@@ -78,7 +78,7 @@ license_management:
     docker run --env SOURCE_CODE="$PWD" \
                --volume "$PWD":/code \
                --volume /var/run/docker.sock:/var/run/docker.sock \
-               --rm -v "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG" gliderlabs/herokuish /bin/herokuish buildpack test
+               --rm -v "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG" /bin/herokuish buildpack test
   }
 
   function code_quality() {
@@ -89,7 +89,6 @@ license_management:
   }
 
   function license_management() {
-    echo "GITLAB_FEATURES: $GITLAB_FEATURES"
     if echo $GITLAB_FEATURES | grep license_management > /dev/null ; then
       # Extract "MAJOR.MINOR" from CI_SERVER_VERSION and generate "MAJOR-MINOR-stable"
       LICENSE_MANAGEMENT_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
