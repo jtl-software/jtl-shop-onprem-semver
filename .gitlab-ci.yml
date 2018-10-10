@@ -48,7 +48,7 @@ test:
   function build() {
     if [[ -n "$CI_USER_VAR" ]]; then
       echo "Logging to GitLab Container Registry with CI credentials..."
-      echo "Container: $CI_CONTAINER_NAME | Repo: $CI_APPLICATION_REPOSITORY | Tag: $CI_APPLICATION_TAG"
+      echo "Container: /jtlshop/semver | Repo: $CI_APPLICATION_REPOSITORY | Tag: $CI_APPLICATION_TAG"
       docker login -u "$CI_USER_VAR" -p "$CI_USER_PW_VAR" "$CI_REGISTRY"
       echo ""
     fi
@@ -77,16 +77,16 @@ test:
         -e ftp_proxy \
         -e NO_PROXY \
         -e no_proxy \
-        --name="$CI_CONTAINER_NAME" -v "$(pwd):/tmp/app:ro" gliderlabs/herokuish /bin/herokuish buildpack build
-      echo "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
-      docker commit "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
-      docker rm "$CI_CONTAINER_NAME" >/dev/null
+        --name="/jtlshop/semver" -v "$(pwd):/tmp/app:ro" gliderlabs/herokuish /bin/herokuish buildpack build
+      echo "/jtlshop/semver" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
+      docker commit "/jtlshop/semver" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
+      docker rm "/jtlshop/semver" >/dev/null
       echo ""
 
       echo "Configuring $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG docker image..."
-      docker create --expose 5000 --env PORT=5000 --name="$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG" /bin/herokuish procfile start web
-      docker commit "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
-      docker rm "$CI_CONTAINER_NAME" >/dev/null
+      docker create --expose 5000 --env PORT=5000 --name="/jtlshop/semver" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG" /bin/herokuish procfile start web
+      docker commit "/jtlshop/semver" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
+      docker rm "/jtlshop/semver" >/dev/null
       echo ""
     fi
 
