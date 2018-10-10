@@ -71,6 +71,8 @@ license_management:
   export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
   export CI_APPLICATION_TAG=$CI_COMMIT_SHA
   export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
+  # Extract "MAJOR.MINOR" from CI_SERVER_VERSION and generate "MAJOR-MINOR-stable" for Security Products
+  export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
 
   function code_quality() {
     docker run --env SOURCE_CODE="$PWD" \
@@ -80,7 +82,8 @@ license_management:
   }
 
   function license_management() {
-    if echo $GITLAB_FEATURES |grep license_management > /dev/null ; then
+    echo "GITLAB_FEATURES: $GITLAB_FEATURES"
+    if echo $GITLAB_FEATURES | grep license_management > /dev/null ; then
       # Extract "MAJOR.MINOR" from CI_SERVER_VERSION and generate "MAJOR-MINOR-stable"
       LICENSE_MANAGEMENT_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
 
