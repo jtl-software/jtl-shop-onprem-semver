@@ -77,6 +77,7 @@ test:
         -e NO_PROXY \
         -e no_proxy \
         --name="$CI_CONTAINER_NAME" -v "$(pwd):/tmp/app:ro" gliderlabs/herokuish /bin/herokuish buildpack build
+      echo "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
       docker commit "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
       docker rm "$CI_CONTAINER_NAME" >/dev/null
       echo ""
