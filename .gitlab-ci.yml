@@ -48,7 +48,7 @@ test:
   function build() {
     if [[ -n "$CI_USER_VAR" ]]; then
       echo "Logging to GitLab Container Registry with CI credentials..."
-      echo "Container: $CI_CONTAINER_NAME" | "Repo: $CI_APPLICATION_REPOSITORY" | "Tag: $CI_APPLICATION_TAG"
+      echo "Container: $CI_CONTAINER_NAME | Repo: $CI_APPLICATION_REPOSITORY | Tag: $CI_APPLICATION_TAG"
       docker login -u "$CI_USER_VAR" -p "$CI_USER_PW_VAR" "$CI_REGISTRY"
       echo ""
     fi
