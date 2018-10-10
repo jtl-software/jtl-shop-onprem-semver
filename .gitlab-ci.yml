@@ -23,12 +23,46 @@ test:
   script:
   - setup_test_db
   - cp -R . /tmp/app
-  - /bin/herokuish buildpack test
+  - bash /bin/herokuish buildpack test
   only:
   - branches
   except:
     variables:
     - $TEST_DISABLED
+
+code_quality:
+  stage: test
+  image: docker:stable
+  allow_failure: true
+  services:
+  - docker:stable-dind
+  script:
+  - setup_docker
+  - code_quality
+  artifacts:
+    paths: [gl-code-quality-report.json]
+  only:
+  - branches
+  except:
+    variables:
+    - $CODE_QUALITY_DISABLED
+
+license_management:
+  stage: test
+  image: docker:stable
+  allow_failure: true
+  services:
+  - docker:stable-dind
+  script:
+  - setup_docker
+  - license_management
+  artifacts:
+    paths: [gl-license-management-report.json]
+  only:
+  - branches
+  except:
+    variables:
+    - $LICENSE_MANAGEMENT_DISABLED
 
 
 # ---------------------------------------------------------------------------
@@ -38,6 +72,25 @@ test:
   export CI_APPLICATION_TAG=$CI_COMMIT_SHA
   export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
 
+  function code_quality() {
+    docker run --env SOURCE_CODE="$PWD" \
+               --volume "$PWD":/code \
+               --volume /var/run/docker.sock:/var/run/docker.sock \
+               "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+  }
+
+  function license_management() {
+    if echo $GITLAB_FEATURES |grep license_management > /dev/null ; then
+      # Extract "MAJOR.MINOR" from CI_SERVER_VERSION and generate "MAJOR-MINOR-stable"
+      LICENSE_MANAGEMENT_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
+
+      docker run --volume "$PWD:/code" \
+                 "registry.gitlab.com/gitlab-org/security-products/license-management:$LICENSE_MANAGEMENT_VERSION" analyze /code
+    else
+      echo "License management is not available in your subscription"
+    fi
+  }
+
   function setup_docker() {
     if ! docker info &>/dev/null; then
       if [ -z "$DOCKER_HOST" -a "$KUBERNETES_PORT" ]; then
@@ -45,14 +98,15 @@ test:
       fi
     fi
   }
+
   function setup_test_db() {
     DB_HOST=localhost
     export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:5432/${POSTGRES_DB}"
   }
+
   function build() {
     if [[ -n "$CI_USER_VAR" ]]; then
       echo "Logging to GitLab Container Registry with CI credentials..."
-      echo "Container: $CI_CONTAINER_NAME | Repo: $CI_APPLICATION_REPOSITORY | Tag: $CI_APPLICATION_TAG"
       docker login -u "$CI_USER_VAR" -p "$CI_USER_PW_VAR" "$CI_REGISTRY"
       echo ""
     fi
@@ -82,7 +136,6 @@ test:
         -e NO_PROXY \
         -e no_proxy \
         --name="$CI_CONTAINER_NAME" -v "$(pwd):/tmp/app:ro" gliderlabs/herokuish /bin/herokuish buildpack build
-      echo "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
       docker commit "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
       docker rm "$CI_CONTAINER_NAME" >/dev/null
       echo ""
