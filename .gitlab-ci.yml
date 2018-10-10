@@ -23,7 +23,7 @@ test:
   script:
   - setup_test_db
   - cp -R . /tmp/app
-  - bash /bin/herokuish buildpack test
+  - test
   only:
   - branches
   except:
@@ -73,6 +73,13 @@ license_management:
   export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
   # Extract "MAJOR.MINOR" from CI_SERVER_VERSION and generate "MAJOR-MINOR-stable" for Security Products
   export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
+
+  function test() {
+    docker run --env SOURCE_CODE="$PWD" \
+               --volume "$PWD":/code \
+               --volume /var/run/docker.sock:/var/run/docker.sock \
+               --rm -v "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG" gliderlabs/herokuish /bin/herokuish buildpack test
+  }
 
   function code_quality() {
     docker run --env SOURCE_CODE="$PWD" \
