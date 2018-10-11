@@ -75,11 +75,6 @@ license_management:
   export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
 
   function test() {
-    if [[ -n "$CI_USER_VAR" ]]; then
-      echo "Logging to GitLab Container Registry with CI credentials..."
-      docker login -u "$CI_USER_VAR" -p "$CI_USER_PW_VAR" "$CI_REGISTRY"
-      echo ""
-    fi
 
     docker run --env SOURCE_CODE="$PWD" \
                --volume "$PWD":/code \
