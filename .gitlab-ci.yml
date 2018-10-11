@@ -64,6 +64,57 @@ license_management:
     variables:
     - $LICENSE_MANAGEMENT_DISABLED
 
+sast:
+  stage: test
+  image: docker:stable
+  allow_failure: true
+  services:
+  - docker:stable-dind
+  script:
+  - setup_docker
+  - sast
+  artifacts:
+    paths: [gl-sast-report.json]
+  only:
+  - branches
+  except:
+    variables:
+    - $SAST_DISABLED
+
+dependency_scanning:
+  stage: test
+  image: docker:stable
+  allow_failure: true
+  services:
+  - docker:stable-dind
+  script:
+  - setup_docker
+  - dependency_scanning
+  artifacts:
+    paths: [gl-dependency-scanning-report.json]
+  only:
+  - branches
+  except:
+    variables:
+    - $DEPENDENCY_SCANNING_DISABLED
+
+container_scanning:
+  stage: test
+  image: docker:stable
+  allow_failure: true
+  services:
+  - docker:stable-dind
+  script:
+  - setup_docker
+  - container_scanning
+  artifacts:
+    paths: [gl-container-scanning-report.json]
+  only:
+  - branches
+  except:
+    variables:
+    - $CONTAINER_SCANNING_DISABLED
+
 
 # ---------------------------------------------------------------------------
 
@@ -74,8 +125,28 @@ license_management:
   # Extract "MAJOR.MINOR" from CI_SERVER_VERSION and generate "MAJOR-MINOR-stable" for Security Products
   export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
 
-  function test() {
+  function container_scanning() {
+    if [[ -n "$CI_REGISTRY_USER" ]]; then
+      echo "Logging to GitLab Container Registry with CI credentials..."
+      docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+      echo ""
+    fi
 
+    docker run -d --name db arminc/clair-db:latest
+    docker run -p 6060:6060 --link db:postgres -d --name clair --restart on-failure arminc/clair-local-scan:v2.0.1
+    apk add -U wget ca-certificates
+    docker pull ${CI_APPLICATION_REPOSITORY}:${CI_APPLICATION_TAG}
+    wget https://github.com/arminc/clair-scanner/releases/download/v8/clair-scanner_linux_amd64
+    mv clair-scanner_linux_amd64 clair-scanner
+    chmod +x clair-scanner
+    touch clair-whitelist.yml
+    retries=0
+    echo "Waiting for clair daemon to start"
+    while( ! wget -T 10 -q -O /dev/null http://docker:6060/v1/namespaces ) ; do sleep 1 ; echo -n "." ; if [ $retries -eq 10 ] ; then echo " Timeout, aborting." ; exit 1 ; fi ; retries=$(($retries+1)) ; done
+    ./clair-scanner -c http://docker:6060 --ip $(hostname -i) -r gl-container-scanning-report.json -l clair.log -w clair-whitelist.yml ${CI_APPLICATION_REPOSITORY}:${CI_APPLICATION_TAG} || true
+  }
+
+  function test() {
     docker run --env SOURCE_CODE="$PWD" \
                --volume "$PWD":/code \
                --volume /var/run/docker.sock:/var/run/docker.sock \
@@ -100,6 +171,41 @@ license_management:
       echo "License management is not available in your subscription"
     fi
   }
+
+   function sast() {
+     case "$CI_SERVER_VERSION" in
+       *-ee)
+
+         # Deprecation notice for CONFIDENCE_LEVEL variable
+         if [ -z "$SAST_CONFIDENCE_LEVEL" -a "$CONFIDENCE_LEVEL" ]; then
+           SAST_CONFIDENCE_LEVEL="$CONFIDENCE_LEVEL"
+           echo "WARNING: CONFIDENCE_LEVEL is deprecated and MUST be replaced with SAST_CONFIDENCE_LEVEL"
+         fi
+
+         docker run --env SAST_CONFIDENCE_LEVEL="${SAST_CONFIDENCE_LEVEL:-3}" \
+                    --volume "$PWD:/code" \
+                    --volume /var/run/docker.sock:/var/run/docker.sock \
+                    "registry.gitlab.com/gitlab-org/security-products/sast:$SP_VERSION" /app/bin/run /code
+         ;;
+       *)
+         echo "GitLab EE is required"
+         ;;
+     esac
+   }
+
+   function dependency_scanning() {
+     case "$CI_SERVER_VERSION" in
+       *-ee)
+         docker run --env DEP_SCAN_DISABLE_REMOTE_CHECKS="${DEP_SCAN_DISABLE_REMOTE_CHECKS:-false}" \
+                    --volume "$PWD:/code" \
+                    --volume /var/run/docker.sock:/var/run/docker.sock \
+                    "registry.gitlab.com/gitlab-org/security-products/dependency-scanning:$SP_VERSION" /code
+         ;;
+       *)
+         echo "GitLab EE is required"
+         ;;
+     esac
+   }
 
   function setup_docker() {
     if ! docker info &>/dev/null; then
