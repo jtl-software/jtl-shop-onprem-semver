@@ -84,7 +84,7 @@ license_management:
     docker run --env SOURCE_CODE="$PWD" \
                --volume "$PWD":/code \
                --volume /var/run/docker.sock:/var/run/docker.sock \
-               --rm "$CI_CONTAINER_NAME" -v "$(pwd):/tmp/app:ro" gliderlabs/herokuish /bin/herokuish buildpack test
+               --rm -v "$(pwd):/tmp/app" gliderlabs/herokuish /bin/herokuish buildpack test
   }
 
   function code_quality() {
