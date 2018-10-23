@@ -47,57 +47,6 @@ code_quality:
     variables:
     - $CODE_QUALITY_DISABLED
 
-license_management:
-  stage: test
-  image: docker:stable
-  allow_failure: true
-  services:
-  - docker:stable-dind
-  script:
-  - setup_docker
-  - license_management
-  artifacts:
-    paths: [gl-license-management-report.json]
-  only:
-  - branches
-  except:
-    variables:
-    - $LICENSE_MANAGEMENT_DISABLED
-
-sast:
-  stage: test
-  image: docker:stable
-  allow_failure: true
-  services:
-  - docker:stable-dind
-  script:
-  - setup_docker
-  - sast
-  artifacts:
-    paths: [gl-sast-report.json]
-  only:
-  - branches
-  except:
-    variables:
-    - $SAST_DISABLED
-
-dependency_scanning:
-  stage: test
-  image: docker:stable
-  allow_failure: true
-  services:
-  - docker:stable-dind
-  script:
-  - setup_docker
-  - dependency_scanning
-  artifacts:
-    paths: [gl-dependency-scanning-report.json]
-  only:
-  - branches
-  except:
-    variables:
-    - $DEPENDENCY_SCANNING_DISABLED
-
 container_scanning:
   stage: test
   image: docker:stable
@@ -126,9 +75,9 @@ container_scanning:
   export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
 
   function container_scanning() {
-    if [[ -n "$CI_REGISTRY_USER" ]]; then
+    if [[ -n "$CI_USER_VAR" ]]; then
       echo "Logging to GitLab Container Registry with CI credentials..."
-      docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+      docker login -u "$CI_USER_VAR" -p "$CI_USER_PW_VAR" "$CI_REGISTRY"
       echo ""
     fi
 
@@ -159,55 +108,6 @@ container_scanning:
                --volume /var/run/docker.sock:/var/run/docker.sock \
                "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
   }
-
-  function license_management() {
-    echo "CI_SERVER_VERSION_MAJOR: $CI_SERVER_VERSION_MAJOR"
-
-    if echo $GITLAB_FEATURES | grep license_management > /dev/null ; then
-      # Extract "MAJOR.MINOR" from CI_SERVER_VERSION and generate "MAJOR-MINOR-stable"
-      LICENSE_MANAGEMENT_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
-
-      docker run --volume "$PWD:/code" \
-                 "registry.gitlab.com/gitlab-org/security-products/license-management:$LICENSE_MANAGEMENT_VERSION" analyze /code
-    else
-      echo "License management is not available in your subscription"
-    fi
-  }
-
-   function sast() {
-     case "$CI_SERVER_VERSION" in
-       *-ee)
-
-         # Deprecation notice for CONFIDENCE_LEVEL variable
-         if [ -z "$SAST_CONFIDENCE_LEVEL" -a "$CONFIDENCE_LEVEL" ]; then
-           SAST_CONFIDENCE_LEVEL="$CONFIDENCE_LEVEL"
-           echo "WARNING: CONFIDENCE_LEVEL is deprecated and MUST be replaced with SAST_CONFIDENCE_LEVEL"
-         fi
-
-         docker run --env SAST_CONFIDENCE_LEVEL="${SAST_CONFIDENCE_LEVEL:-3}" \
-                    --volume "$PWD:/code" \
-                    --volume /var/run/docker.sock:/var/run/docker.sock \
-                    "registry.gitlab.com/gitlab-org/security-products/sast:$SP_VERSION" /app/bin/run /code
-         ;;
-       *)
-         echo "GitLab EE is required"
-         ;;
-     esac
-   }
-
-   function dependency_scanning() {
-     case "$CI_SERVER_VERSION" in
-       *-ee)
-         docker run --env DEP_SCAN_DISABLE_REMOTE_CHECKS="${DEP_SCAN_DISABLE_REMOTE_CHECKS:-false}" \
-                    --volume "$PWD:/code" \
-                    --volume /var/run/docker.sock:/var/run/docker.sock \
-                    "registry.gitlab.com/gitlab-org/security-products/dependency-scanning:$SP_VERSION" /code
-         ;;
-       *)
-         echo "GitLab EE is required"
-         ;;
-     esac
-   }
 
   function setup_docker() {
     if ! docker info &>/dev/null; then
