@@ -17,10 +17,10 @@ variables:
   DOCKER_DRIVER: overlay2
 
 services:
-- docker:dind
+  - docker:dind
 
 before_script:
-- docker info
+  - docker info
 
 code_quality:
   stage: test
@@ -39,3 +39,5 @@ code_quality:
   artifacts:
     reports:
       codequality: [gl-code-quality-report.json]
+  tags:
+  - building_testing_docker
