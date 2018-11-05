@@ -1,4 +1,4 @@
-image: docker:stable
+image: gitlab.jtl-software.de:4567/$CI_PROJECT_PATH/building_testing
 
 variables:
   # When using dind service we need to instruct docker, to talk with the
@@ -53,7 +53,6 @@ code_quality:
   function building() {
     ls -la /
     docker run \
-      gitlab.jtl-software.de:4567/$CI_PROJECT_PATH/building_testing \
       ls -la / \
       ls -la /builds
   }
