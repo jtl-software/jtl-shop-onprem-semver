@@ -65,5 +65,6 @@ code_quality:
   }
 
 before_script:
+ - /etc/init.d/docker start
  - docker info
  - *methods
