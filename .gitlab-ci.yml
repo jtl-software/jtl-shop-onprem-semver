@@ -66,5 +66,4 @@ code_quality:
   }
 
 before_script:
- - docker info
  - *methods
