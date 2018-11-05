@@ -49,16 +49,6 @@ code_quality:
 
 .methods: &methods |
   function building() {
-    if [[ -n "$CI_USER_VAR" ]]; then
-      echo "Logging to GitLab Container Registry with CI credentials..."
-      docker login -u "$CI_USER_VAR" -p "$CI_USER_PW_VAR" "$CI_REGISTRY"
-      echo ""
-    fi
-
-    docker create \
-      --volume "$MOUNT_POINT:/mnt" \
-      semver-building-image
-
     docker run \
       --volume "$MOUNT_POINT:/mnt" \
       semver-building-image
@@ -67,11 +57,10 @@ code_quality:
   function codeQuality() {
     export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
     docker run \
-            --env SOURCE_CODE="$MOUNT_POINT" \
-            --volume "$MOUNT_POINT:/mnt":/code \
-            --volume /var/run/docker.sock:/var/run/docker.sock \
-            semver-building-image \
-            "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+      --env SOURCE_CODE="$MOUNT_POINT" \
+      --volume "$MOUNT_POINT:/mnt":/code \
+      --volume /var/run/docker.sock:/var/run/docker.sock \
+      "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
   }
 
 before_script:
