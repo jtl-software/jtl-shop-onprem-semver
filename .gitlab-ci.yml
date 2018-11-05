@@ -20,9 +20,6 @@ variables:
 services:
   - docker:dind
 
-before_script:
-  - docker info
-
 stages:
   - build
   - test
@@ -72,3 +69,7 @@ code_quality:
             semver-building-image \
             "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
   }
+
+before_script:
+ - docker info
+ - *methods
