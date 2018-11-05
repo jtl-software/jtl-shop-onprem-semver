@@ -65,6 +65,6 @@ code_quality:
   }
 
 before_script:
- - service start docker
+ - service docker start
  - docker info
  - *methods
