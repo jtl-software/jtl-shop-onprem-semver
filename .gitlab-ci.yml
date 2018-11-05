@@ -52,7 +52,6 @@ code_quality:
 .methods: &methods |
   function building() {
     docker run \
-      -v "$PWD:/includes" \
       "composer install -d $PWD/includes"
   }
   function codeQuality() {
