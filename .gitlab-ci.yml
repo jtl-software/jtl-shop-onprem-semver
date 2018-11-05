@@ -37,6 +37,7 @@ code_quality:
   image: gitlab.jtl-software.de:4567/$CI_PROJECT_PATH/building_testing
   variables:
     DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: none
   allow_failure: true
   services:
     - docker:stable-dind
@@ -56,7 +57,11 @@ code_quality:
   function codeQuality() {
     export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
     ls -la $PWD
-    ls -la $PWD/includes
+    docker run \
+      --env SOURCE_CODE="$PWD" \
+      --volume "$PWD":/code \
+      --volume /var/run/docker.sock:/var/run/docker.sock \
+      "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
   }
 
 before_script:
