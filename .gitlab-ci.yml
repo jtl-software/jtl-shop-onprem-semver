@@ -51,7 +51,6 @@ code_quality:
   function building() {
     docker run \
       --volume "$MOUNT_POINT:/mnt" \
-      semver-building-image
       composer install
   }
   function codeQuality() {
