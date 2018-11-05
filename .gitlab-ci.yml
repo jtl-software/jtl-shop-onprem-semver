@@ -51,7 +51,8 @@ code_quality:
 
 .methods: &methods |
   function building() {
-    echo $USER
+    echo whoami
+    whoami
     ls -la /root
     php /root/composer install -d $PWD/includes
   }
