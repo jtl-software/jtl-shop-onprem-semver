@@ -51,6 +51,12 @@ code_quality:
 
 .methods: &methods |
   function building() {
+    if [[ -n "$CI_USER_VAR" ]]; then
+      echo "Logging to GitLab Container Registry with CI credentials..."
+      docker login -u "$CI_USER_VAR" -p "$CI_USER_PW_VAR" "$CI_REGISTRY"
+      echo ""
+    fi
+
     docker run \
       building_testing \
       php /root/composer.phar install -d $PWD/includes
