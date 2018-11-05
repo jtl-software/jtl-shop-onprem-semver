@@ -52,8 +52,7 @@ code_quality:
 
 .methods: &methods |
   function building() {
-    docker run \
-      ls -la / && composer install -d $PWD
+    composer install -d $PWD
   }
   function codeQuality() {
     export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
