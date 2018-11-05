@@ -26,6 +26,8 @@ stages:
 
 building:
   stage: build
+  services:
+  - docker:stable-dind
   script:
     - building
   tags:
@@ -51,7 +53,7 @@ code_quality:
   function building() {
     docker run \
       --volume "$MOUNT_POINT:/mnt" \
-      composer install
+      composer install -d $MOUNT_POINT/includes
   }
   function codeQuality() {
     export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
