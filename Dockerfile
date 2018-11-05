@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install apt-transport-https ca-certificates softwa
 #RUN /etc/init.d/docker status
 #RUN docker version
 #RUN docker run hello-world
+RUN mkdir /builds
 RUN cd /root \
     && wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig \
     && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \

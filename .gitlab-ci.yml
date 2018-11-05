@@ -53,7 +53,7 @@ code_quality:
 .methods: &methods |
   function building() {
     echo $CI_REGISTRY_IMAGE
-    docker cp $PWD $CI_REGISTRY_IMAGE/building_testing:/builds
+    docker cp $PWD/. $CI_REGISTRY_IMAGE/building_testing:/.
     docker run \
       $CI_REGISTRY_IMAGE/building_testing \
       "ls -la /"
