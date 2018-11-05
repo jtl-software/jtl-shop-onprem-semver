@@ -65,6 +65,6 @@ code_quality:
   }
 
 before_script:
- - sudo systemctl start docker
+ - service start docker
  - docker info
  - *methods
