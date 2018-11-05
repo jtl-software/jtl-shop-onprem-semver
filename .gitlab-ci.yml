@@ -15,7 +15,7 @@ variables:
   # When using dind, it's wise to use the overlayfs driver for
   # improved performance.
   DOCKER_DRIVER: overlay2
-  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
+  MOUNT_POINT: /builds/$CI_PROJECT_PATH
 
 services:
   - docker:dind
