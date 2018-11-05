@@ -51,6 +51,7 @@ code_quality:
 
 .methods: &methods |
   function building() {
+    echo hi there
     php /root/composer.phar install -d $PWD/includes
   }
   function codeQuality() {
