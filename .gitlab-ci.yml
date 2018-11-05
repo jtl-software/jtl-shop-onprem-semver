@@ -66,6 +66,6 @@ code_quality:
   }
 
 before_script:
- - service docker start
- - docker info
+ - sudo service docker start
+ - sudo docker info
  - *methods
