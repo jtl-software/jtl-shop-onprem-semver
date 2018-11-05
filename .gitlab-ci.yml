@@ -20,9 +20,6 @@ variables:
 services:
   - docker:dind
 
-before_script:
-  - docker info
-
 stages:
   - build
   - test
@@ -30,10 +27,7 @@ stages:
 building:
   stage: build
   script:
-    - docker run
-        --volume "$MOUNT_POINT:/mnt"
-        semver-building-image
-        composer install
+    - building
   tags:
     - building_testing_docker
 
@@ -45,15 +39,37 @@ code_quality:
   services:
     - docker:stable-dind
   script:
-    - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
-    - docker run
-        --env SOURCE_CODE="$MOUNT_POINT"
-        --volume "$MOUNT_POINT:/mnt":/code
-        --volume /var/run/docker.sock:/var/run/docker.sock
-        semver-building-image
-        "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+    - codeQuality
   artifacts:
     reports:
       codequality: [gl-code-quality-report.json]
   tags:
   - building_testing_docker
+
+
+.methods: &methods |
+  function building() {
+    if [[ -n "$CI_USER_VAR" ]]; then
+      echo "Logging to GitLab Container Registry with CI credentials..."
+      docker login -u "$CI_USER_VAR" -p "$CI_USER_PW_VAR" "$CI_REGISTRY"
+      echo ""
+    fi
+
+    docker run
+            --volume "$MOUNT_POINT:/mnt"
+            semver-building-image
+            composer install
+  }
+  function codeQuality() {
+    export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
+    docker run
+            --env SOURCE_CODE="$MOUNT_POINT"
+            --volume "$MOUNT_POINT:/mnt":/code
+            --volume /var/run/docker.sock:/var/run/docker.sock
+            semver-building-image
+            "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+  }
+
+before_script:
+  - docker info
+  - *methods
