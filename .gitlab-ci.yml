@@ -1,3 +1,5 @@
+image: docker:stable
+
 variables:
   # When using dind service we need to instruct docker, to talk with the
   # daemon started inside of the service. The daemon is available with
@@ -24,7 +26,6 @@ stages:
 
 building:
   stage: build
-  image: gitlab.jtl-software.de:4567/$CI_PROJECT_PATH/building_testing
   services:
     - docker:stable-dind
   script:
@@ -34,6 +35,8 @@ building:
 
 code_quality:
   stage: test
+  services:
+    - docker:stable-dind
   variables:
     DOCKER_DRIVER: overlay2
     GIT_STRATEGY: none
@@ -49,13 +52,13 @@ code_quality:
 
 .methods: &methods |
   function building() {
-    php /root/composer.phar install -d $PWD
+    docker run \
+      composer install -d $PWD
   }
   function codeQuality() {
     export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
     ls -la $PWD
     docker run \
-      gitlab.jtl-software.de:4567/$CI_PROJECT_PATH/building_testing \
       --env SOURCE_CODE="$PWD" \
       --volume "$PWD":/code \
       --volume /var/run/docker.sock:/var/run/docker.sock \
