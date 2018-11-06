@@ -125,7 +125,7 @@ code_quality:
   }
   function buildingPHP71() {
     ls -la $(pwd)
-    ls -la pwd
+    ls -la /
     docker run \
       --volume $(pwd):/testing \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
