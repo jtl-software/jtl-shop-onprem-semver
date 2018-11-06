@@ -109,37 +109,37 @@ code_quality:
   function buildingPHP71() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
-      -v "/builds/tools/scripts/build.sh:/build.sh"
+      -v "/builds/tools/scripts/build.sh:/build.sh" \
       bash build.sh
   }
   function buildingPHP72() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
-      -v "/builds/tools/scripts/build.sh:/build.sh"
+      -v "/builds/tools/scripts/build.sh:/build.sh" \
       bash build.sh
   }
   function buildingPHP73() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
-      -v "/builds/tools/scripts/build.sh:/build.sh"
+      -v "/builds/tools/scripts/build.sh:/build.sh" \
       bash build.sh
   }
   function testingPHP71() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
-      -v "/builds/tools/scripts/tests.sh:/tests.sh"
+      -v "/builds/tools/scripts/tests.sh:/tests.sh" \
       bash tests.sh
   }
   function testingPHP72() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
-      -v "/builds/tools/scripts/tests.sh:/tests.sh"
+      -v "/builds/tools/scripts/tests.sh:/tests.sh" \
       bash tests.sh
   }
   function testingPHP73() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
-      -v "/builds/tools/scripts/tests.sh:/tests.sh"
+      -v "/builds/tools/scripts/tests.sh:/tests.sh" \
       bash tests.sh
   }
   function codeQuality() {
