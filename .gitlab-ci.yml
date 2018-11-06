@@ -127,7 +127,7 @@ code_quality:
   function buildingPHP71() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
-      -v "$PWD":/testing
+      -v "$PWD":/testing \
       bash $BUILD_SCRIPT_PATH
 
     docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1"
