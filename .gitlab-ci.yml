@@ -21,35 +21,43 @@ services:
   - docker:dind
 
 stages:
-  - image
   - build
   - test
 
-buildDocker:
-  stage: image
-  services:
-    - docker:stable-dind
-  script:
-    - buildDockerImages
-  variables:
-    DOCKER_DRIVER: overlay2
-  tags:
-    - building_testing_docker
-
-buildProjekt:
+buildPHP71:
   stage: build
   services:
     - docker:stable-dind
   script:
     - buildingPHP71
+  variables:
+    DOCKER_DRIVER: overlay2
+  tags:
+    - building_testing_docker
+
+buildPHP72:
+  stage: build
+  services:
+    - docker:stable-dind
+  script:
     - buildingPHP72
+  variables:
+    DOCKER_DRIVER: overlay2
+  tags:
+    - building_testing_docker
+
+buildPHP73:
+  stage: build
+  services:
+    - docker:stable-dind
+  script:
     - buildingPHP73
   variables:
     DOCKER_DRIVER: overlay2
   tags:
     - building_testing_docker
 
-testphp71:
+testPHP71:
   stage: test
   services:
     - docker:stable-dind
@@ -61,7 +69,7 @@ testphp71:
   tags:
     - building_testing_docker
 
-testphp72:
+testPHP72:
   stage: test
   services:
     - docker:stable-dind
@@ -73,7 +81,7 @@ testphp72:
   tags:
     - building_testing_docker
 
-testphp73:
+testPHP73:
   stage: test
   services:
     - docker:stable-dind
@@ -114,45 +122,37 @@ code_quality:
       echo ""
     fi
   }
-  function buildDockerImages() {
-    docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1" -f "tools/docker/php7.1/Dockerfile" .
-    docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1"
-    docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2" -f "tools/docker/php7.2/Dockerfile" .
-    docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2"
-    docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3" -f "tools/docker/php7.3/Dockerfile" .
-    docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3"
-  }
   function buildingPHP71() {
     docker run \
-      --volume $(pwd):/builds \
-      $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
-      bash $BUILD_SCRIPT_PATH
+      --volume $(pwd):/dockerBuild \
+      $CI_REGISTRY_IMAGE/building_testing-php7.1 \
+      cp /dockerBuild /build && bash $BUILD_SCRIPT_PATH
   }
   function buildingPHP72() {
     docker run \
-      --volume $(pwd):/builds \
-      $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
-      bash $BUILD_SCRIPT_PATH
+      --volume $(pwd):/dockerBuild \
+      $CI_REGISTRY_IMAGE/building_testing-php7.2 \
+      cp /dockerBuild /build && bash $BUILD_SCRIPT_PATH
   }
   function buildingPHP73() {
     docker run \
-      --volume $(pwd):/builds \
-      $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
-      bash $BUILD_SCRIPT_PATH
+      --volume $(pwd):/dockerBuild \
+      $CI_REGISTRY_IMAGE/building_testing-php7.3 \
+      cp /dockerBuild /build && bash $BUILD_SCRIPT_PATH
   }
   function testingPHP71() {
     docker run \
-      $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
+      $CI_REGISTRY_IMAGE/building_testing-php7.1 \
       bash $TESTS_SCRIPT_PATH
   }
   function testingPHP72() {
     docker run \
-      $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
+      $CI_REGISTRY_IMAGE/building_testing-php7.2 \
       bash $TESTS_SCRIPT_PATH
   }
   function testingPHP73() {
     docker run \
-      $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
+      $CI_REGISTRY_IMAGE/building_testing-php7.3 \
       bash $TESTS_SCRIPT_PATH
   }
   function codeQuality() {

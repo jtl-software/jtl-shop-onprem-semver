@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 ls -la
-ls -la /builds
+ls -la /build
 vendor/bin/phpunit

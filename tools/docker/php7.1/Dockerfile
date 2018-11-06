@@ -1,5 +1,5 @@
 FROM php:7.1-cli
-WORKDIR '/builds'
+WORKDIR '/build'
 RUN apt-get update && apt-get install wget git unzip -y
 RUN cd /root \
     && wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig \
