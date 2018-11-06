@@ -105,7 +105,8 @@ code_quality:
 
 
 .methods: &methods |
-  export BUILD_SCRIPT_PATH="/tools/scripts/build.sh"
+  export BUILD_SCRIPT_PATH=/builds/tools/scripts/build.sh
+  export TESTS_SCRIPT_PATH=/builds/tools/scripts/tests.sh
 
   function dockerLogin() {
     if [[ -n "$CI_USER_VAR" ]]; then
@@ -125,38 +126,32 @@ code_quality:
   function buildingPHP71() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
-      --volume "$PWD$BUILD_SCRIPT_PATH":/build.sh \
-      bash build.sh
+      bash $BUILD_SCRIPT_PATH
   }
   function buildingPHP72() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
-      --volume "$PWD$BUILD_SCRIPT_PATH":/build.sh \
-      bash build.sh
+      bash $BUILD_SCRIPT_PATH
   }
   function buildingPHP73() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
-      --volume "$PWD$BUILD_SCRIPT_PATH":/build.sh \
-      bash build.sh
+      bash $BUILD_SCRIPT_PATH
   }
   function testingPHP71() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
-      --volume "$PWD/tools/scripts/tests.sh":/tests.sh \
-      bash tests.sh
+      bash $TESTS_SCRIPT_PATH
   }
   function testingPHP72() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
-      --volume "$PWD/tools/scripts/tests.sh":/tests.sh \
-      bash tests.sh
+      bash $TESTS_SCRIPT_PATH
   }
   function testingPHP73() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
-      --volume "$PWD/tools/scripts/tests.sh":/tests.sh \
-      bash tests.sh
+      bash $TESTS_SCRIPT_PATH
   }
   function codeQuality() {
     export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
