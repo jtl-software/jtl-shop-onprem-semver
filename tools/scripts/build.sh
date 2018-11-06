@@ -2,3 +2,5 @@
 
 cd /builds
 php /root/composer.phar install
+ls -la /
+ls -la /testing

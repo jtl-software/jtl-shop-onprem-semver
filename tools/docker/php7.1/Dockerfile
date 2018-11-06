@@ -1,6 +1,7 @@
 FROM php:7.1-cli
 RUN apt-get update && apt-get install wget git unzip -y
 RUN mkdir /builds
+RUN mkdir /testing
 COPY . /builds
 RUN cd /root \
     && wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig \
