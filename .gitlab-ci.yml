@@ -123,47 +123,43 @@ code_quality:
     docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3"
   }
   function buildingPHP71() {
-    echo $(pwd)
-    echo $PWD
-    ls -la $(pwd)
-    ls -la $PWD
-    ls -la /builds/jtlshop/semver
-    ls -la /
     docker run \
-      --volume $(pwd):/testing \
+      --volume $(pwd):/builds \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
-      bash $BUILD_SCRIPT_PATH /testing
+      bash $BUILD_SCRIPT_PATH
 
     docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1"
   }
   function buildingPHP72() {
     docker run \
+      --volume $(pwd):/builds \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
-      bash $BUILD_SCRIPT_PATH /testing
+      bash $BUILD_SCRIPT_PATH
 
     docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2"
   }
   function buildingPHP73() {
     docker run \
+      --volume $(pwd):/builds \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
-      bash $BUILD_SCRIPT_PATH /testing
+      bash $BUILD_SCRIPT_PATH
 
     docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3"
   }
   function testingPHP71() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
-      bash $TESTS_SCRIPT_PATH /testing
+      bash $TESTS_SCRIPT_PATH
   }
   function testingPHP72() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
-      bash $TESTS_SCRIPT_PATH /testing
+      bash $TESTS_SCRIPT_PATH
   }
   function testingPHP73() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
-      bash $TESTS_SCRIPT_PATH /testing
+      bash $TESTS_SCRIPT_PATH
   }
   function codeQuality() {
     export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
