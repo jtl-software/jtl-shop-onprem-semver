@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 
-php /root/composer.phar install /builds
+cd /builds
+php /root/composer.phar install
 /builds/vendor/bin/phpunit

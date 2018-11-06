@@ -1,5 +1,5 @@
 FROM php:7.1-cli
-RUN apt-get update && apt-get install apt-transport-https ca-certificates software-properties-common curl gnupg2 wget git unzip openrc -y
+RUN apt-get update && apt-get install wget git unzip -y
 #RUN wget https://download.docker.com/linux/debian/gpg && apt-key add gpg \
 #    && echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee -a /etc/apt/sources.list.d/docker.list \
 #    && apt-get update && apt-get -y install docker-ce
