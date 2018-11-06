@@ -127,16 +127,22 @@ code_quality:
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
       bash $BUILD_SCRIPT_PATH
+
+    docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1"
   }
   function buildingPHP72() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
       bash $BUILD_SCRIPT_PATH
+
+    docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2"
   }
   function buildingPHP73() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
       bash $BUILD_SCRIPT_PATH
+
+    docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3"
   }
   function testingPHP71() {
     docker run \
