@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
-cd /builds
+BUILD_PATH=$1
+
+cd ${BUILD_PATH}
 vendor/bin/phpunit
