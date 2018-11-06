@@ -112,8 +112,8 @@ code_quality:
 
 
 .methods: &methods |
-  export BUILD_SCRIPT_PATH=/builds/tools/scripts/build.sh
-  export TESTS_SCRIPT_PATH=/builds/tools/scripts/tests.sh
+  export BUILD_SCRIPT_PATH=tools/scripts/build.sh
+  export TESTS_SCRIPT_PATH=tools/scripts/tests.sh
 
   function dockerLogin() {
     if [[ -n "$CI_USER_VAR" ]]; then
@@ -126,7 +126,7 @@ code_quality:
     docker run \
       --volume $(pwd):/dockerBuild \
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
-      cp -a /dockerBuild /build && ls -la / && ls -la /build && bash $BUILD_SCRIPT_PATH
+      ls -la / && ls -la /build && bash $BUILD_SCRIPT_PATH
   }
   function buildingPHP72() {
     docker run \
