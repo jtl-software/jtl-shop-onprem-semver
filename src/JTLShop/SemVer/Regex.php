@@ -27,7 +27,7 @@ class Regex
      **/
     private static $versionStr = '/^(?<version>v?[0-9]+\.[0-9]+(?:\.[0-9]+)?)(?<prerelease>-[0-9a-zA-Z.]+)?(?<build>\+[0-9a-zA-Z.]+)?$/';
 
-    private static $versionNum = '/^(?<version>(\d)(\d{2})(\d{1})?)$/';
+    private static $versionNum = '/^(?<version>(\d)(\d{2})(\d{1})?)$/'
 
     /**
      * Match a SemVer using a regex

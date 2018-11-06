@@ -25,7 +25,7 @@ stages:
   - quality_check
   - test
 
-buildPHP71:
+build_PHP_7.1:
   stage: build
   services:
     - docker:stable-dind
@@ -36,7 +36,7 @@ buildPHP71:
   tags:
     - building_testing_docker
 
-buildPHP72:
+build_PHP_7.2:
   stage: build
   services:
     - docker:stable-dind
@@ -47,7 +47,7 @@ buildPHP72:
   tags:
     - building_testing_docker
 
-buildPHP73:
+build_PHP_7.3:
   stage: build
   services:
     - docker:stable-dind
@@ -64,7 +64,6 @@ code_quality:
     - docker:stable-dind
   variables:
     DOCKER_DRIVER: overlay2
-  allow_failure: true
   script:
     - codeQuality
   artifacts:
@@ -73,7 +72,7 @@ code_quality:
   tags:
     - building_testing_docker
 
-testPHP71:
+test_PHP_7.1:
   stage: test
   services:
     - docker:stable-dind
@@ -85,7 +84,7 @@ testPHP71:
   tags:
     - building_testing_docker
 
-testPHP72:
+test_PHP_7.2:
   stage: test
   services:
     - docker:stable-dind
@@ -97,7 +96,7 @@ testPHP72:
   tags:
     - building_testing_docker
 
-testPHP73:
+test_PHP_7.3:
   stage: test
   services:
     - docker:stable-dind
@@ -178,9 +177,6 @@ testPHP73:
     echo ""
   }
   function codeQuality() {
-    echo $PWD
-    ls -la /
-    ls -la $PWD
     docker run \
       --env SOURCE_CODE="$PWD" \
       --volume "$PWD":/code \
