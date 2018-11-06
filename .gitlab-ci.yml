@@ -31,6 +31,8 @@ buildDocker:
   script:
     - dockerLogin
     - buildDockerImages
+  variables:
+    DOCKER_DRIVER: overlay2
   tags:
     - building_testing_docker
 
@@ -42,6 +44,9 @@ buildProjekt:
     - buildingPHP71
     - buildingPHP72
     - buildingPHP73
+  variables:
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: none
   tags:
     - building_testing_docker
 
@@ -49,6 +54,9 @@ testphp71:
   stage: test
   services:
     - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: none
   script:
     - testingPHP71
   tags:
@@ -58,6 +66,9 @@ testphp72:
   stage: test
   services:
     - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: none
   script:
     - testingPHP72
   tags:
@@ -67,6 +78,9 @@ testphp73:
   stage: test
   services:
     - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: none
   allow_failure: true
   script:
     - testingPHP73
@@ -91,6 +105,8 @@ code_quality:
 
 
 .methods: &methods |
+  export BUILD_SCRIPT_PATH="/tools/scripts/build.sh"
+
   function dockerLogin() {
     if [[ -n "$CI_USER_VAR" ]]; then
       echo "Logging to GitLab Container Registry with CI credentials..."
@@ -109,37 +125,37 @@ code_quality:
   function buildingPHP71() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
-      --volume /builds/tools/scripts/build.sh:/build.sh \
+      --volume "$PWD$BUILD_SCRIPT_PATH":/build.sh \
       bash build.sh
   }
   function buildingPHP72() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
-      --volume /builds/tools/scripts/build.sh:/build.sh \
+      --volume "$PWD$BUILD_SCRIPT_PATH":/build.sh \
       bash build.sh
   }
   function buildingPHP73() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
-      --volume /builds/tools/scripts/build.sh:/build.sh \
+      --volume "$PWD$BUILD_SCRIPT_PATH":/build.sh \
       bash build.sh
   }
   function testingPHP71() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
-      --volume /builds/tools/scripts/tests.sh:/tests.sh \
+      --volume "$PWD/tools/scripts/tests.sh":/tests.sh \
       bash tests.sh
   }
   function testingPHP72() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.2 \
-      --volume /builds/tools/scripts/tests.sh:/tests.sh \
+      --volume "$PWD/tools/scripts/tests.sh":/tests.sh \
       bash tests.sh
   }
   function testingPHP73() {
     docker run \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3 \
-      --volume /builds/tools/scripts/tests.sh:/tests.sh \
+      --volume "$PWD/tools/scripts/tests.sh":/tests.sh \
       bash tests.sh
   }
   function codeQuality() {
