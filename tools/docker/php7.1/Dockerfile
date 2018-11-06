@@ -1,7 +1,5 @@
 FROM php:7.1-cli
 WORKDIR '/builds'
-RUN ls -la
-RUN ls -la /
 COPY . /builds
 RUN apt-get update && apt-get install wget git unzip -y
 RUN cd /root \

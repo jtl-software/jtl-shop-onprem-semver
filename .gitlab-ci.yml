@@ -124,7 +124,11 @@ code_quality:
     docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.3"
   }
   function buildingPHP71() {
+    echo $(pwd)
+    echo $PWD
     ls -la $(pwd)
+    ls -la $PWD
+    ls -la /builds/jtlshop/semver
     ls -la /
     docker run \
       --volume $(pwd):/testing \
