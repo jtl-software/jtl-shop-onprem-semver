@@ -125,7 +125,7 @@ code_quality:
   }
   function buildingPHP71() {
     docker run \
-      --volume "$PWD":/testing \
+      --volume "$PWD/.":/testing \
       $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-php7.1 \
       bash $BUILD_SCRIPT_PATH
 

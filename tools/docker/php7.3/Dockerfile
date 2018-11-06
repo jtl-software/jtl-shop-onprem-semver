@@ -8,3 +8,4 @@ RUN cd /root \
     && php -r "if (hash_file('SHA384', 'composer-setup.php') === file_get_contents('installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
     && php composer-setup.php \
     && php -r "unlink('composer-setup.php'); unlink('installer.sig');"
+RUN chmod a+x /root/composer.phar && ln -s /root/composer.phar /usr/local/bin/composer

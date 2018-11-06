@@ -3,4 +3,4 @@
 ls -la /
 ls -la /testing
 cd /builds
-php composer install
+composer install
