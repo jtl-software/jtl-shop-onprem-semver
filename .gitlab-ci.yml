@@ -127,17 +127,25 @@ code_quality:
     fi
   }
   function buildingPHP71() {
+    echo "Building projekt from docker image..."
+
     docker run \
       --volume $(pwd):/dockerBuild \
       --name="$CI_CONTAINER_NAME-php7.1" \
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
       /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
 
-    docker commit "$CI_CONTAINER_NAME" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.1"
+    docker commit "$CI_CONTAINER_NAME-php7.1" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.1"
     docker rm "$CI_CONTAINER_NAME-php7.1" >/dev/null
+    echo ""
+
+    echo "Pushing to GitLab Container Registry..."
+    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.1"
     echo ""
   }
   function buildingPHP72() {
+    echo "Building projekt from docker image..."
+
     docker run \
       --volume $(pwd):/dockerBuild \
       --name="$CI_CONTAINER_NAME-php7.2" \
@@ -147,8 +155,14 @@ code_quality:
     docker commit "$CI_CONTAINER_NAME-php7.2" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.2"
     docker rm "$CI_CONTAINER_NAME-php7.2" >/dev/null
     echo ""
+
+    echo "Pushing to GitLab Container Registry..."
+    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.2"
+    echo ""
   }
   function buildingPHP73() {
+    echo "Building projekt from docker image..."
+
     docker run \
       --volume $(pwd):/dockerBuild \
       --name="$CI_CONTAINER_NAME-php7.3" \
@@ -157,6 +171,10 @@ code_quality:
 
     docker commit "$CI_CONTAINER_NAME-php7.3" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.3"
     docker rm "$CI_CONTAINER_NAME-php7.3" >/dev/null
+    echo ""
+
+    echo "Pushing to GitLab Container Registry..."
+    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.3"
     echo ""
   }
   function testingPHP71() {
