@@ -2,5 +2,5 @@
 
 ls -la /
 ls -la /testing
-cd /builds
+cd /testing
 composer install
