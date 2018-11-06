@@ -46,7 +46,6 @@ buildProjekt:
     - buildingPHP73
   variables:
     DOCKER_DRIVER: overlay2
-    GIT_STRATEGY: none
   tags:
     - building_testing_docker
 
