@@ -126,19 +126,19 @@ code_quality:
     docker run \
       --volume $(pwd):/dockerBuild \
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
-      /bin/bash -c "ls -la /; ls -la /build; cp -a /dockerBuild/. /build; ls -la /build; bash $BUILD_SCRIPT_PATH"
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
   }
   function buildingPHP72() {
     docker run \
       --volume $(pwd):/dockerBuild \
       $CI_REGISTRY_IMAGE/building_testing-php7.2 \
-      cp -a /dockerBuild /build && bash $BUILD_SCRIPT_PATH
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
   }
   function buildingPHP73() {
     docker run \
       --volume $(pwd):/dockerBuild \
       $CI_REGISTRY_IMAGE/building_testing-php7.3 \
-      cp -a /dockerBuild /build && bash $BUILD_SCRIPT_PATH
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
   }
   function testingPHP71() {
     docker run \
