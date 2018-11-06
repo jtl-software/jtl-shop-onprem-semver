@@ -3,4 +3,4 @@
 ls -la /
 ls -la /testing
 cd /builds
-php -f /root/composer.phar install
+php /root/composer.phar install
