@@ -52,8 +52,7 @@ code_quality:
 
 .methods: &methods |
   function building() {
-    echo $CI_REGISTRY_IMAGE
-    export CONTAINER_SHA=docker inspect --format="{{.Id}}" $CI_REGISTRY_IMAGE/building_testing:latest
+    docker inspect --format="{{.Id}}" $CI_REGISTRY_IMAGE/building_testing:latest
     echo $CONTAINER_SHA
     docker cp $PWD $CONTAINER_SHA:/builds
     docker run \
