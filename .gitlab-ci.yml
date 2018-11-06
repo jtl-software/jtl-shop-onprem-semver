@@ -126,7 +126,7 @@ code_quality:
     docker run \
       --volume $(pwd):/dockerBuild \
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
-      cp -a /dockerBuild /build && bash $BUILD_SCRIPT_PATH
+      cp -a /dockerBuild /build && ls -la / && ls -la /build && bash $BUILD_SCRIPT_PATH
   }
   function buildingPHP72() {
     docker run \
