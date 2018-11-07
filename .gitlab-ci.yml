@@ -22,7 +22,7 @@ services:
 
 stages:
 #  - codeclimate
-  - test
+#  - test
   - build
   - deploy
 
@@ -44,51 +44,51 @@ stages:
 #  tags:
 #    - building_testing_docker
 
-test_PHP_7.1:
-  stage: test
-  services:
-    - docker:stable-dind
-  variables:
-    DOCKER_DRIVER: overlay2
-  script:
-    - testingPHP71
-  only:
-    - branches
-  except:
-    - master
-  tags:
-    - building_testing_docker
-
-test_PHP_7.2:
-  stage: test
-  services:
-    - docker:stable-dind
-  variables:
-    DOCKER_DRIVER: overlay2
-  script:
-    - testingPHP72
-  only:
-    - branches
-  except:
-    - master
-  tags:
-    - building_testing_docker
-
-test_PHP_7.3:
-  stage: test
-  services:
-    - docker:stable-dind
-  variables:
-    DOCKER_DRIVER: overlay2
-  allow_failure: true
-  script:
-    - testingPHP73
-  only:
-    - branches
-  except:
-    - master
-  tags:
-    - building_testing_docker
+#test_PHP_7.1:
+#  stage: test
+#  services:
+#    - docker:stable-dind
+#  variables:
+#    DOCKER_DRIVER: overlay2
+#  script:
+#    - testingPHP71
+#  only:
+#    - branches
+#  except:
+#    - master
+#  tags:
+#    - building_testing_docker
+#
+#test_PHP_7.2:
+#  stage: test
+#  services:
+#    - docker:stable-dind
+#  variables:
+#    DOCKER_DRIVER: overlay2
+#  script:
+#    - testingPHP72
+#  only:
+#    - branches
+#  except:
+#    - master
+#  tags:
+#    - building_testing_docker
+#
+#test_PHP_7.3:
+#  stage: test
+#  services:
+#    - docker:stable-dind
+#  variables:
+#    DOCKER_DRIVER: overlay2
+#  allow_failure: true
+#  script:
+#    - testingPHP73
+#  only:
+#    - branches
+#  except:
+#    - master
+#  tags:
+#    - building_testing_docker
 
 build:
   stage: build
