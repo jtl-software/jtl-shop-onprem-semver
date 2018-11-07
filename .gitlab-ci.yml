@@ -47,7 +47,6 @@ test_PHP_7.1:
     - docker:stable-dind
   variables:
     DOCKER_DRIVER: overlay2
-    GIT_STRATEGY: none
   script:
     - testingPHP71
   tags:
@@ -59,7 +58,6 @@ test_PHP_7.2:
     - docker:stable-dind
   variables:
     DOCKER_DRIVER: overlay2
-    GIT_STRATEGY: none
   script:
     - testingPHP72
   tags:
@@ -71,7 +69,6 @@ test_PHP_7.3:
     - docker:stable-dind
   variables:
     DOCKER_DRIVER: overlay2
-    GIT_STRATEGY: none
   allow_failure: true
   script:
     - testingPHP73
@@ -129,7 +126,10 @@ deploy:
       --env SOURCE_CODE="$PWD" \
       --volume "$PWD":/code \
       --volume /var/run/docker.sock:/var/run/docker.sock \
+      -it \
       "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+
+    ls -la
   }
   function testingPHP71() {
     echo "Testing projekt in PHP 7.1 docker image..."
