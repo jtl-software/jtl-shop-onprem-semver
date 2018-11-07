@@ -145,7 +145,7 @@ deploy:
       -i \
       "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
 
-    ls -la
+    cat gl-code-quality-report.json
   }
   function testingPHP71() {
     echo "Testing projekt in PHP 7.1 docker image..."
@@ -204,8 +204,8 @@ deploy:
     echo "Deploying archive to build server..."
 
     docker run \
-      --name="$CI_CONTAINER_NAME-deploy"
-      $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build
+      --name="$CI_CONTAINER_NAME-deploy" \
+      $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build \
       /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
 
     docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
