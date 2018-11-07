@@ -1,7 +1,7 @@
 FROM php:7.1-cli
 WORKDIR '/build'
 RUN mkdir /archive
-RUN apt-get update && apt-get install wget git unzip -y
+RUN apt-get update && apt-get install wget git unzip zip -y
 RUN cd /root \
     && wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig \
     && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
