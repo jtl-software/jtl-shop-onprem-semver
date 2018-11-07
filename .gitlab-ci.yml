@@ -22,7 +22,7 @@ services:
 
 stages:
 #  - codeclimate
-#  - test
+  - test
   - build
   - deploy
 
@@ -44,51 +44,51 @@ stages:
 #  tags:
 #    - building_testing_docker
 
-#test_PHP_7.1:
-#  stage: test
-#  services:
-#    - docker:stable-dind
-#  variables:
-#    DOCKER_DRIVER: overlay2
-#  script:
-#    - testingPHP71
-#  only:
-#    - branches
-#  except:
-#    - master
-#  tags:
-#    - building_testing_docker
-#
-#test_PHP_7.2:
-#  stage: test
-#  services:
-#    - docker:stable-dind
-#  variables:
-#    DOCKER_DRIVER: overlay2
-#  script:
-#    - testingPHP72
-#  only:
-#    - branches
-#  except:
-#    - master
-#  tags:
-#    - building_testing_docker
-#
-#test_PHP_7.3:
-#  stage: test
-#  services:
-#    - docker:stable-dind
-#  variables:
-#    DOCKER_DRIVER: overlay2
-#  allow_failure: true
-#  script:
-#    - testingPHP73
-#  only:
-#    - branches
-#  except:
-#    - master
-#  tags:
-#    - building_testing_docker
+test_PHP_7.1:
+  stage: test
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - testingPHP71
+  only:
+    - branches
+  except:
+    - master
+  tags:
+    - building_testing_docker
+
+test_PHP_7.2:
+  stage: test
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - testingPHP72
+  only:
+    - branches
+  except:
+    - master
+  tags:
+    - building_testing_docker
+
+test_PHP_7.3:
+  stage: test
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  allow_failure: true
+  script:
+    - testingPHP73
+  only:
+    - branches
+  except:
+    - master
+  tags:
+    - building_testing_docker
 
 build:
   stage: build
@@ -190,7 +190,7 @@ deploy:
       --volume $(pwd):/dockerBuild \
       --name="$CI_CONTAINER_NAME-build" \
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
-      /bin/bash -c "cp -a /dockerBuild/. /build; ls -la; bash $BUILD_SCRIPT_PATH"
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
 
     docker commit "$CI_CONTAINER_NAME-build" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build"
     docker rm "$CI_CONTAINER_NAME-build" >/dev/null
@@ -209,7 +209,6 @@ deploy:
       /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
 
     docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
-    docker inspect --format='{{.Id}}' $CI_CONTAINER_NAME-build
     docker rm $CI_CONTAINER_NAME-deploy >/dev/null
   }
 
