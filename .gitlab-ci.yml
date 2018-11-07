@@ -206,10 +206,10 @@ deploy:
     docker run \
       --name="$CI_CONTAINER_NAME-deploy" \
       $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build \
-      /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive; ls -la /archive"
+      /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
 
     echo $CI_BUILD_SERVER_ARCHIVE_PATH
-    docker cp $CI_CONTAINER_NAME-deploy:/archive $CI_BUILD_SERVER_ARCHIVE_PATH
+    docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
   }
 
 before_script:
