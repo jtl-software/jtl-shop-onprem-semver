@@ -21,28 +21,28 @@ services:
   - docker:dind
 
 stages:
-  - codeclimate
+#  - codeclimate
   - test
   - build
   - deploy
 
 
-code_quality:
-  stage: codeclimate
-  services:
-    - docker:stable-dind
-  variables:
-    DOCKER_DRIVER: overlay2
-  script:
-    - codeQuality
-  artifacts:
-    paths: [gl-code-quality-report.json]
-  only:
-    - branches
-  except:
-    - master
-  tags:
-    - building_testing_docker
+#code_quality:
+#  stage: codeclimate
+#  services:
+#    - docker:stable-dind
+#  variables:
+#    DOCKER_DRIVER: overlay2
+#  script:
+#    - codeQuality
+#  artifacts:
+#    paths: [gl-code-quality-report.json]
+#  only:
+#    - branches
+#  except:
+#    - master
+#  tags:
+#    - building_testing_docker
 
 test_PHP_7.1:
   stage: test
@@ -190,7 +190,7 @@ deploy:
       --volume $(pwd):/build \
       --name="$CI_CONTAINER_NAME-build" \
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
-      /bin/bash -c "bash $BUILD_SCRIPT_PATH"
+      /bin/bash -c "bash $BUILD_SCRIPT_PATH; ls -la"
 
     docker commit "$CI_CONTAINER_NAME-build" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build"
     docker rm "$CI_CONTAINER_NAME-build" >/dev/null
@@ -206,7 +206,7 @@ deploy:
     docker run \
       --name="$CI_CONTAINER_NAME-deploy" \
       $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build \
-      /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
+      /bin/bash -c "ls -la;bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
 
     docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
   }

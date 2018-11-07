@@ -1,11 +1,11 @@
 <phpunit
-    bootstrap="Tests/bootstrap.php"
+    bootstrap="tests/bootstrap.php"
     colors="true"
     >
 
     <testsuites>
         <testsuite name="SemVer">
-            <directory>Tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
