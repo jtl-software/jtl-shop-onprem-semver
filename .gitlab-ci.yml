@@ -156,6 +156,7 @@ deploy:
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
       /bin/bash -c "cp -a /dockerBuild/. /build; bash $TESTS_SCRIPT_PATH"
 
+    ls -la $(pwd)
     docker rm "$CI_CONTAINER_NAME-php7.1" >/dev/null
     echo "Tests finished and docker image deleted"
   }
@@ -168,6 +169,7 @@ deploy:
       $CI_REGISTRY_IMAGE/building_testing-php7.2 \
       /bin/bash -c "cp -a /dockerBuild/. /build; bash $TESTS_SCRIPT_PATH"
 
+    ls -la $(pwd)
     docker rm "$CI_CONTAINER_NAME-php7.2" >/dev/null
     echo "Tests finished and docker image deleted"
   }
@@ -180,17 +182,19 @@ deploy:
       $CI_REGISTRY_IMAGE/building_testing-php7.3 \
       /bin/bash -c "cp -a /dockerBuild/. /build; bash $TESTS_SCRIPT_PATH"
 
+    ls -la $(pwd)
     docker rm "$CI_CONTAINER_NAME-php7.3" >/dev/null
     echo "Tests finished and docker image deleted"
   }
   function buildProcess() {
     echo "Building projekt in PHP 7.1 docker image..."
 
+    ls -la $(pwd)
     docker run \
       --volume $(pwd):/dockerBuild \
       --name="$CI_CONTAINER_NAME-build" \
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
-      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
+      /bin/bash -c "cp -a /dockerBuild/. /build; ls -la bash $BUILD_SCRIPT_PATH"
 
     docker commit "$CI_CONTAINER_NAME-build" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build"
     docker rm "$CI_CONTAINER_NAME-build" >/dev/null
@@ -209,7 +213,9 @@ deploy:
       /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
 
     docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
-    docker rm "$CI_CONTAINER_NAME-deploy" >/dev/null
+    export DOCKER_ID_BUILD=docker inspect --format='{{.Id}}' $CI_CONTAINER_NAME-build
+    echo $DOCKER_ID_BUILD
+    docker rm $CI_CONTAINER_NAME-deploy >/dev/null
   }
 
 before_script:
