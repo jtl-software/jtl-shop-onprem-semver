@@ -22,7 +22,7 @@ services:
 
 stages:
 #  - codeclimate
-#  - test
+  - test
   - build
   - deploy
 
@@ -44,51 +44,51 @@ stages:
 #  tags:
 #    - building_testing_docker
 
-#test_PHP_7.1:
-#  stage: test
-#  services:
-#    - docker:stable-dind
-#  variables:
-#    DOCKER_DRIVER: overlay2
-#  script:
-#    - testingPHP71
-#  only:
-#    - branches
-#  except:
-#    - master
-#  tags:
-#    - building_testing_docker
-#
-#test_PHP_7.2:
-#  stage: test
-#  services:
-#    - docker:stable-dind
-#  variables:
-#    DOCKER_DRIVER: overlay2
-#  script:
-#    - testingPHP72
-#  only:
-#    - branches
-#  except:
-#    - master
-#  tags:
-#    - building_testing_docker
-#
-#test_PHP_7.3:
-#  stage: test
-#  services:
-#    - docker:stable-dind
-#  variables:
-#    DOCKER_DRIVER: overlay2
-#  allow_failure: true
-#  script:
-#    - testingPHP73
-#  only:
-#    - branches
-#  except:
-#    - master
-#  tags:
-#    - building_testing_docker
+test_PHP_7.1:
+  stage: test
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - testingPHP71
+  only:
+    - branches
+  except:
+    - master
+  tags:
+    - building_testing_docker
+
+test_PHP_7.2:
+  stage: test
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - testingPHP72
+  only:
+    - branches
+  except:
+    - master
+  tags:
+    - building_testing_docker
+
+test_PHP_7.3:
+  stage: test
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  allow_failure: true
+  script:
+    - testingPHP73
+  only:
+    - branches
+  except:
+    - master
+  tags:
+    - building_testing_docker
 
 build:
   stage: build
@@ -206,9 +206,10 @@ deploy:
     docker run \
       --name="$CI_CONTAINER_NAME-deploy" \
       $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build \
-      /bin/bash -c "dpkg -l | grep zip; ls -la vendor; bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
+      /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive; ls -la /archive"
 
-    docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
+    echo $CI_BUILD_SERVER_ARCHIVE_PATH
+    docker cp $CI_CONTAINER_NAME-deploy:/archive $CI_BUILD_SERVER_ARCHIVE_PATH
   }
 
 before_script:
