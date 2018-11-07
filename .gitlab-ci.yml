@@ -37,9 +37,10 @@ code_quality:
     - codeQuality
   artifacts:
     paths: [gl-code-quality-report.json]
+  only:
+    - branches
   except:
-    variables:
-      - $CODE_QUALITY_DISABLED
+    - master
   tags:
     - building_testing_docker
 
@@ -51,6 +52,10 @@ test_PHP_7.1:
     DOCKER_DRIVER: overlay2
   script:
     - testingPHP71
+  only:
+    - branches
+  except:
+    - master
   tags:
     - building_testing_docker
 
@@ -62,6 +67,10 @@ test_PHP_7.2:
     DOCKER_DRIVER: overlay2
   script:
     - testingPHP72
+  only:
+    - branches
+  except:
+    - master
   tags:
     - building_testing_docker
 
@@ -74,6 +83,10 @@ test_PHP_7.3:
   allow_failure: true
   script:
     - testingPHP73
+  only:
+    - branches
+  except:
+    - master
   tags:
     - building_testing_docker
 
@@ -91,6 +104,7 @@ build:
     - tags
   tags:
     - building_testing_docker
+
 deploy:
   stage: deploy
   services:
@@ -194,7 +208,7 @@ deploy:
       $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build
       /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
 
-    docker cp $CI_CONTAINER_NAME-deploy:/archive/. /home/gitlab-runner/plugins
+    docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
   }
 
 before_script:
