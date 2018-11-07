@@ -1,0 +1,205 @@
+image: docker:stable
+
+variables:
+  # When using dind service we need to instruct docker, to talk with the
+  # daemon started inside of the service. The daemon is available with
+  # a network connection instead of the default /var/run/docker.sock socket.
+  #
+  # The 'docker' hostname is the alias of the service container as described at
+  # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#accessing-the-services
+  #
+  # Note that if you're using Kubernetes executor, the variable should be set to
+  # tcp://localhost:2375 because of how Kubernetes executor connects services
+  # to the job container
+  #DOCKER_HOST: tcp://docker:2375/
+  # When using dind, it's wise to use the overlayfs driver for
+  # improved performance.
+  DOCKER_DRIVER: overlay2
+  MOUNT_POINT: /builds/$CI_PROJECT_PATH
+
+services:
+  - docker:dind
+
+stages:
+  - code_quality
+  - build
+  - test
+
+
+code_quality:
+  stage: code_quality
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - codeQuality
+  artifacts:
+    reports:
+      codequality: [gl-code-quality-report.json]
+  tags:
+    - building_testing_docker
+
+build_PHP_7.1:
+  stage: build
+  services:
+    - docker:stable-dind
+  script:
+    - buildingPHP71
+  variables:
+    DOCKER_DRIVER: overlay2
+  tags:
+    - building_testing_docker
+
+build_PHP_7.2:
+  stage: build
+  services:
+    - docker:stable-dind
+  script:
+    - buildingPHP72
+  variables:
+    DOCKER_DRIVER: overlay2
+  tags:
+    - building_testing_docker
+
+build_PHP_7.3:
+  stage: build
+  services:
+    - docker:stable-dind
+  script:
+    - buildingPHP73
+  variables:
+    DOCKER_DRIVER: overlay2
+  tags:
+    - building_testing_docker
+
+test_PHP_7.1:
+  stage: test
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: none
+  script:
+    - testingPHP71
+  tags:
+    - building_testing_docker
+
+test_PHP_7.2:
+  stage: test
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: none
+  script:
+    - testingPHP72
+  tags:
+    - building_testing_docker
+
+test_PHP_7.3:
+  stage: test
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: none
+  allow_failure: true
+  script:
+    - testingPHP73
+  tags:
+    - building_testing_docker
+
+
+.methods: &methods |
+  export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
+  export CI_APPLICATION_TAG=$CI_COMMIT_SHA
+  export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
+  export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
+  export BUILD_SCRIPT_PATH=tools/scripts/build.sh
+  export TESTS_SCRIPT_PATH=tools/scripts/tests.sh
+
+  function dockerLogin() {
+    if [[ -n "$CI_USER_VAR" ]]; then
+      echo "Logging to GitLab Container Registry with CI credentials..."
+      docker login -u "$CI_USER_VAR" -p "$CI_USER_PW_VAR" "$CI_REGISTRY"
+      echo ""
+    fi
+  }
+  function codeQuality() {
+    docker run \
+      --env SOURCE_CODE="$PWD" \
+      --volume "$PWD":/code \
+      --volume /var/run/docker.sock:/var/run/docker.sock \
+      "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+  }
+  function buildingPHP71() {
+    echo "Building projekt from docker image..."
+
+    docker run \
+      --volume $(pwd):/dockerBuild \
+      --name="$CI_CONTAINER_NAME-php7.1" \
+      $CI_REGISTRY_IMAGE/building_testing-php7.1 \
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
+
+    docker commit "$CI_CONTAINER_NAME-php7.1" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.1"
+    docker rm "$CI_CONTAINER_NAME-php7.1" >/dev/null
+    echo ""
+
+    echo "Pushing to GitLab Container Registry..."
+    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.1"
+    echo ""
+  }
+  function buildingPHP72() {
+    echo "Building projekt from docker image..."
+
+    docker run \
+      --volume $(pwd):/dockerBuild \
+      --name="$CI_CONTAINER_NAME-php7.2" \
+      $CI_REGISTRY_IMAGE/building_testing-php7.2 \
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
+
+    docker commit "$CI_CONTAINER_NAME-php7.2" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.2"
+    docker rm "$CI_CONTAINER_NAME-php7.2" >/dev/null
+    echo ""
+
+    echo "Pushing to GitLab Container Registry..."
+    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.2"
+    echo ""
+  }
+  function buildingPHP73() {
+    echo "Building projekt from docker image..."
+
+    docker run \
+      --volume $(pwd):/dockerBuild \
+      --name="$CI_CONTAINER_NAME-php7.3" \
+      $CI_REGISTRY_IMAGE/building_testing-php7.3 \
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
+
+    docker commit "$CI_CONTAINER_NAME-php7.3" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.3"
+    docker rm "$CI_CONTAINER_NAME-php7.3" >/dev/null
+    echo ""
+
+    echo "Pushing to GitLab Container Registry..."
+    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.3"
+    echo ""
+  }
+  function testingPHP71() {
+    docker run \
+      $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.1 \
+      bash $TESTS_SCRIPT_PATH
+  }
+  function testingPHP72() {
+    docker run \
+      $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.2 \
+      bash $TESTS_SCRIPT_PATH
+  }
+  function testingPHP73() {
+    docker run \
+      $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.3 \
+      bash $TESTS_SCRIPT_PATH
+  }
+
+before_script:
+ - *methods
+ - dockerLogin
