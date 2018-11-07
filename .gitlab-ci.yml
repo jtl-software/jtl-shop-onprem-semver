@@ -22,8 +22,9 @@ services:
 
 stages:
   - code_quality
-  - build
   - test
+  - build
+  - deploy
 
 
 code_quality:
@@ -37,39 +38,6 @@ code_quality:
   artifacts:
     reports:
       codequality: [gl-code-quality-report.json]
-  tags:
-    - building_testing_docker
-
-build_PHP_7.1:
-  stage: build
-  services:
-    - docker:stable-dind
-  script:
-    - buildingPHP71
-  variables:
-    DOCKER_DRIVER: overlay2
-  tags:
-    - building_testing_docker
-
-build_PHP_7.2:
-  stage: build
-  services:
-    - docker:stable-dind
-  script:
-    - buildingPHP72
-  variables:
-    DOCKER_DRIVER: overlay2
-  tags:
-    - building_testing_docker
-
-build_PHP_7.3:
-  stage: build
-  services:
-    - docker:stable-dind
-  script:
-    - buildingPHP73
-  variables:
-    DOCKER_DRIVER: overlay2
   tags:
     - building_testing_docker
 
@@ -110,14 +78,44 @@ test_PHP_7.3:
   tags:
     - building_testing_docker
 
+build:
+  stage: build
+  services:
+    - docker:stable-dind
+  variables:
+   DOCKER_DRIVER: overlay2
+  script:
+    - buildProcess
+  only:
+    - master
+    - /^release\/.*$/
+    - tags
+  tags:
+    - building_testing_docker
+deploy:
+  stage: deploy
+  services:
+    - docker:stable-dind
+  variables:
+   DOCKER_DRIVER: overlay2
+  script:
+    - deployProcess
+  only:
+    - master
+    - /^release\/.*$/
+    - tags
+  tags:
+    - build
+
 
 .methods: &methods |
   export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
   export CI_APPLICATION_TAG=$CI_COMMIT_SHA
   export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
   export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
-  export BUILD_SCRIPT_PATH=tools/scripts/build.sh
   export TESTS_SCRIPT_PATH=tools/scripts/tests.sh
+  export BUILD_SCRIPT_PATH=tools/scripts/build.sh
+  export DEPLOY_SCRIPT_PATH=tools/scripts/deploy.sh
 
   function dockerLogin() {
     if [[ -n "$CI_USER_VAR" ]]; then
@@ -133,71 +131,68 @@ test_PHP_7.3:
       --volume /var/run/docker.sock:/var/run/docker.sock \
       "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
   }
-  function buildingPHP71() {
-    echo "Building projekt from docker image..."
+  function testingPHP71() {
+    echo "Testing projekt in PHP 7.1 docker image..."
 
     docker run \
       --volume $(pwd):/dockerBuild \
       --name="$CI_CONTAINER_NAME-php7.1" \
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
-      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $TESTS_SCRIPT_PATH"
 
-    docker commit "$CI_CONTAINER_NAME-php7.1" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.1"
     docker rm "$CI_CONTAINER_NAME-php7.1" >/dev/null
-    echo ""
-
-    echo "Pushing to GitLab Container Registry..."
-    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.1"
-    echo ""
+    echo "Tests finished and docker image deleted"
   }
-  function buildingPHP72() {
-    echo "Building projekt from docker image..."
+  function testingPHP72() {
+    echo "Testing projekt in PHP 7.2 docker image..."
 
     docker run \
       --volume $(pwd):/dockerBuild \
       --name="$CI_CONTAINER_NAME-php7.2" \
       $CI_REGISTRY_IMAGE/building_testing-php7.2 \
-      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $TESTS_SCRIPT_PATH"
 
-    docker commit "$CI_CONTAINER_NAME-php7.2" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.2"
     docker rm "$CI_CONTAINER_NAME-php7.2" >/dev/null
-    echo ""
-
-    echo "Pushing to GitLab Container Registry..."
-    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.2"
-    echo ""
+    echo "Tests finished and docker image deleted"
   }
-  function buildingPHP73() {
-    echo "Building projekt from docker image..."
+  function testingPHP73() {
+    echo "Testing projekt in PHP 7.3 docker image..."
 
     docker run \
       --volume $(pwd):/dockerBuild \
       --name="$CI_CONTAINER_NAME-php7.3" \
       $CI_REGISTRY_IMAGE/building_testing-php7.3 \
-      /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $TESTS_SCRIPT_PATH"
 
-    docker commit "$CI_CONTAINER_NAME-php7.3" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.3"
     docker rm "$CI_CONTAINER_NAME-php7.3" >/dev/null
+    echo "Tests finished and docker image deleted"
+  }
+  function buildProcess() {
+    echo "Building projekt in PHP 7.1 docker image..."
+
+    docker run \
+      --volume $(pwd):/build \
+      --name="$CI_CONTAINER_NAME-build" \
+      $CI_REGISTRY_IMAGE/building_testing-php7.1 \
+      /bin/bash -c "bash $BUILD_SCRIPT_PATH"
+
+    docker commit "$CI_CONTAINER_NAME-build" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build"
+    docker rm "$CI_CONTAINER_NAME-build" >/dev/null
     echo ""
 
     echo "Pushing to GitLab Container Registry..."
-    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.3"
-    echo ""
+    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build"
+    echo "Build finished and docker image deleted"
   }
-  function testingPHP71() {
+  function deployProcess() {
+    echo "Deploying archive to build server..."
+
     docker run \
-      $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.1 \
-      bash $TESTS_SCRIPT_PATH
-  }
-  function testingPHP72() {
-    docker run \
-      $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.2 \
-      bash $TESTS_SCRIPT_PATH
-  }
-  function testingPHP73() {
-    docker run \
-      $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.3 \
-      bash $TESTS_SCRIPT_PATH
+      --name="$CI_CONTAINER_NAME-deploy"
+      $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build
+      /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
+
+    docker cp $CI_CONTAINER_NAME-deploy:/archive/. /home/gitlab-runner/plugins
   }
 
 before_script:
