@@ -178,7 +178,7 @@ deploy:
       --volume $(pwd):/dockerBuild \
       --name="$CI_CONTAINER_NAME-php7.3" \
       $CI_REGISTRY_IMAGE/building_testing-php7.3 \
-      /bin/bash -c "cp -a /dockerBuild/. /build; bash $TESTS_SCRIPT_PATH"
+      /bin/bash -c "cp -a /dockerBuild/. /build; bash $TESTS_SCRIPT_PATH; ls -la vendor"
 
     docker rm "$CI_CONTAINER_NAME-php7.3" >/dev/null
     echo "Tests finished and docker image deleted"
@@ -206,7 +206,7 @@ deploy:
     docker run \
       --name="$CI_CONTAINER_NAME-deploy" \
       $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build \
-      /bin/bash -c "ls -la; ls -la /; ls -la /build;bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
+      /bin/bash -c "ls -la vendor; bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
 
     docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
   }
