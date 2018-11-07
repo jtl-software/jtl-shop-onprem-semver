@@ -21,9 +21,24 @@ services:
   - docker:dind
 
 stages:
+  - code_quality
   - build
-  - quality_check
   - test
+
+
+code_quality:
+  stage: code_quality
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - codeQuality
+  artifacts:
+    reports:
+      codequality: [gl-code-quality-report.json]
+  tags:
+    - building_testing_docker
 
 build_PHP_7.1:
   stage: build
@@ -55,20 +70,6 @@ build_PHP_7.3:
     - buildingPHP73
   variables:
     DOCKER_DRIVER: overlay2
-  tags:
-    - building_testing_docker
-
-code_quality:
-  stage: quality_check
-  services:
-    - docker:stable-dind
-  variables:
-    DOCKER_DRIVER: overlay2
-  script:
-    - codeQuality
-  artifacts:
-    reports:
-      codequality: [gl-code-quality-report.json]
   tags:
     - building_testing_docker
 
@@ -125,6 +126,13 @@ test_PHP_7.3:
       echo ""
     fi
   }
+  function codeQuality() {
+    docker run \
+      --env SOURCE_CODE="$PWD" \
+      --volume "$PWD":/code \
+      --volume /var/run/docker.sock:/var/run/docker.sock \
+      "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+  }
   function buildingPHP71() {
     echo "Building projekt from docker image..."
 
@@ -175,13 +183,6 @@ test_PHP_7.3:
     echo "Pushing to GitLab Container Registry..."
     docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-php7.3"
     echo ""
-  }
-  function codeQuality() {
-    docker run \
-      --env SOURCE_CODE="$PWD" \
-      --volume "$PWD":/code \
-      --volume /var/run/docker.sock:/var/run/docker.sock \
-      "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
   }
   function testingPHP71() {
     docker run \
