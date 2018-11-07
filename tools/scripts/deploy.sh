@@ -8,5 +8,5 @@ ARCHIVE_PATH="$3/$FILENAME";
 
 echo "";
 echo "Create zip of build files...";
+zip -r ${ARCHIVE_PATH} . -x *.git*\* .idea*\* tools*\* tests*\* .travis.yml\* phpunit.xml\*;
 echo "";
-zip -r ${ARCHIVE_PATH} . -x *.git*\* .idea*\* tools*\* tests*\* .travis.yml\* phpunit.xml\*
