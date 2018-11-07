@@ -126,7 +126,7 @@ deploy:
       --env SOURCE_CODE="$PWD" \
       --volume "$PWD":/code \
       --volume /var/run/docker.sock:/var/run/docker.sock \
-      -it \
+      -i \
       "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
 
     ls -la
