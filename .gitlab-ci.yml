@@ -197,7 +197,7 @@ deploy:
 
     docker start \
       $CI_CONTAINER_NAME-build \
-      -i /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
+      -i "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
 
     docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
     docker rm $CI_CONTAINER_NAME-build >/dev/null
