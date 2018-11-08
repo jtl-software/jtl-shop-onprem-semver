@@ -191,25 +191,18 @@ deploy:
       --name="$CI_CONTAINER_NAME-build" \
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
       /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
-
-    docker commit "$CI_CONTAINER_NAME-build" "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build"
-    docker rm "$CI_CONTAINER_NAME-build" >/dev/null
-    echo ""
-
-    echo "Pushing to GitLab Container Registry..."
-    docker push "$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build"
-    echo "Build finished and docker image deleted"
   }
   function deployProcess() {
     echo "Deploying archive to build server..."
 
     docker run \
       --name="$CI_CONTAINER_NAME-deploy" \
-      $CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG-build \
+      $CI_CONTAINER_NAME-build \
       /bin/bash -c "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
 
     docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
     docker rm $CI_CONTAINER_NAME-deploy >/dev/null
+    docker rm $CI_CONTAINER_NAME-build >/dev/null
   }
 
 before_script:
