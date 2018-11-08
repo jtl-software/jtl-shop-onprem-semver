@@ -191,16 +191,20 @@ deploy:
       --name="$CI_CONTAINER_NAME-build" \
       $CI_REGISTRY_IMAGE/building_testing-php7.1 \
       /bin/bash -c "cp -a /dockerBuild/. /build; bash $BUILD_SCRIPT_PATH"
+
+    docker commit $CI_CONTAINER_NAME-build $CI_CONTAINER_NAME-build-image
   }
   function deployProcess() {
     echo "Deploying archive to build server..."
 
-    docker start \
-      $CI_CONTAINER_NAME-build \
+    docker run \
+      --name="$CI_CONTAINER_NAME-deploy" \
+      $CI_CONTAINER_NAME-build-image \
       -i "bash $DEPLOY_SCRIPT_PATH $CI_PROJECT_NAME $CI_COMMIT_REF_NAME /archive"
 
     docker cp $CI_CONTAINER_NAME-deploy:/archive/. $CI_BUILD_SERVER_ARCHIVE_PATH
     docker rm $CI_CONTAINER_NAME-build >/dev/null
+    docker rm $CI_CONTAINER_NAME-deploy >/dev/null
   }
 
 before_script:
