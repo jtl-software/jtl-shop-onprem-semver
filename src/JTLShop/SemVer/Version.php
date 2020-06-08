@@ -1,27 +1,15 @@
 <?php
-/**
- * Version.php
- *
- * @category        Naneau
- * @package         SemVer
- * @subpackage      Version
- */
 
 namespace JTLShop\SemVer;
 
-use JTLShop\SemVer\Version\Versionable;
+use InvalidArgumentException;
 use JTLShop\SemVer\Version\Build;
 use JTLShop\SemVer\Version\PreRelease;
-use InvalidArgumentException;
+use JTLShop\SemVer\Version\Versionable;
 
 /**
- * Version
- *
- * A single SemVer version
- *
- * @category        Naneau
- * @package         SemVer
- * @subpackage      Version
+ * Class Version
+ * @package JTLShop\SemVer
  */
 class Version extends Versionable
 {
@@ -29,27 +17,27 @@ class Version extends Versionable
      * Pre release version
      *
      * @var PreRelease
-     **/
+     */
     private $preRelease;
 
     /**
      * Build version
      *
      * @var Build
-     **/
+     */
     private $build;
 
     /**
-     * Original version String
+     * Original version string
      *
-     * @var originalVersionString
+     * @var string
      */
     private $originalVersionString;
 
     /**
      * Set the original version string for later usage
      *
-     * @param $version
+     * @param string $version
      */
     public function setOriginalVersion($version)
     {
@@ -79,7 +67,7 @@ class Version extends Versionable
     /**
      * Set the pre release version
      *
-     * @param  PreRelease $preRelease
+     * @param PreRelease $preRelease
      * @return Version
      */
     public function setPreRelease(PreRelease $preRelease)
@@ -93,7 +81,7 @@ class Version extends Versionable
      * Does this Version have a pre release?
      *
      * @return bool
-     **/
+     */
     public function hasPreRelease()
     {
         return ($this->preRelease instanceof PreRelease);
@@ -112,7 +100,7 @@ class Version extends Versionable
     /**
      * Set the build
      *
-     * @param  Build   $build
+     * @param Build $build
      * @return Version
      */
     public function setBuild(Build $build)
@@ -126,7 +114,7 @@ class Version extends Versionable
      * Does this Version have a Build?
      *
      * @return bool
-     **/
+     */
     public function hasBuild()
     {
         return ($this->build instanceof Build);
@@ -136,7 +124,7 @@ class Version extends Versionable
      * Get the next logical version relative to the provided base version. If
      * no base is supplied, base will be the same as the current version.
      *
-     * @param  Version|string|null $base
+     * @param Version|string|null $base
      * @return Version
      * @throws InvalidArgumentException
      */
@@ -146,14 +134,10 @@ class Version extends Versionable
         //  it is empty.
         if (empty($base)) {
             $base = $this;
-        }
-        else {
-            if (is_string($base)) {
-                $base = Parser::parse($base);
-            }
-            elseif (! $base instanceof Version) {
-                throw new InvalidArgumentException("\$base must be of type Version");
-            }
+        } elseif (\is_string($base)) {
+            $base = Parser::parse($base);
+        } elseif (!$base instanceof self) {
+            throw new InvalidArgumentException('$base must be of type Version');
         }
 
         // If the base is ahead of this Version then the next version will be
@@ -162,7 +146,7 @@ class Version extends Versionable
             return $base->cleanCopy();
         }
 
-        $next = new Version;
+        $next = new self();
 
         $next->setPrefix($this->getPrefix());
         $next->setMajor($this->getMajor());
@@ -185,12 +169,11 @@ class Version extends Versionable
                 }
 
                 $next->setPreRelease($pre);
+            } else {
+                throw new InvalidArgumentException('This version has left prerelease without updating the base.
+                 Base should not be prerelease.');
             }
-            else {
-                throw new InvalidArgumentException("This version has left prerelease without updating the base. Base should not be prerelease.");
-            }
-        }
-        elseif ( ! $this->hasPreRelease()) {
+        } elseif (!$this->hasPreRelease()) {
             $next->setPatch($this->getPatch() + 1);
         }
         // The case of $this having a pre-release when $base does not means
@@ -208,7 +191,7 @@ class Version extends Versionable
      */
     public function cleanCopy()
     {
-        $version = new Version;
+        $version = new self();
 
         $version->setPrefix($this->getPrefix());
         $version->setMajor($this->getMajor());
@@ -226,7 +209,7 @@ class Version extends Versionable
      * String representation of this Version
      *
      * @return string
-     **/
+     */
     public function __toString()
     {
         $string = parent::__toString();
@@ -248,57 +231,47 @@ class Version extends Versionable
      * Parse a new version or return an existing version
      *
      * @param Version|string $version
-     *
      * @return Version
      */
     public static function parse($version)
     {
         if ($version instanceof self) {
             return $version;
-        } else {
-            return Parser::parse($version);
         }
+
+        return Parser::parse($version);
     }
 
     /**
      * Check if the version is greater than another version
      *
      * @param Version|string $v2
-     *
      * @return bool
      */
     public function greaterThan($v2)
     {
-        $v2 = self::parse($v2);
-
-        return Compare::greaterThan($this, $v2);
+        return Compare::greaterThan($this, self::parse($v2));
     }
 
     /**
      * Check if the version is smaller than another version
      *
      * @param Version|string $v2
-     *
      * @return bool
      */
     public function smallerThan($v2)
     {
-        $v2 = self::parse($v2);
-
-        return Compare::smallerThan($this, $v2);
+        return Compare::smallerThan($this, self::parse($v2));
     }
 
     /**
      * Check if the version is equals to another version
      *
      * @param Version|string $v2
-     *
      * @return bool
      */
     public function equals($v2)
     {
-        $v2 = self::parse($v2);
-
-        return Compare::equals($this, $v2);
+        return Compare::equals($this, self::parse($v2));
     }
 }

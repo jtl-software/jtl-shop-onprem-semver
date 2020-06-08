@@ -7,9 +7,7 @@
  */
 
 use JTLShop\SemVer\Parser;
-use JTLShop\SemVer\Version;
-
-use \PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 
 /**
  * VersionNextTest

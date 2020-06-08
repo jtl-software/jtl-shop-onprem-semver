@@ -1,23 +1,10 @@
 <?php
-/**
- * Versionable.php
- *
- * @category        Naneau
- * @package         SemVer
- * @subpackage      Version
- */
 
 namespace JTLShop\SemVer\Version;
 
 /**
- * Versionable
- *
- * Versionable class, both the main SemVer version as well as pre-release parts
- * can contain X.Y.Z version numbers
- *
- * @category        Naneau
- * @package         SemVer
- * @subpackage      Version
+ * Class Versionable
+ * @package JTLShop\SemVer\Version
  */
 abstract class Versionable
 {
@@ -25,28 +12,28 @@ abstract class Versionable
      * Prefix of version
      *
      * @var int
-     **/
-    private $prefix = null;
+     */
+    private $prefix;
 
     /**
      * Major version
      *
      * @var int
-     **/
+     */
     private $major = 0;
 
     /**
      * Minor version
      *
      * @var int
-     **/
+     */
     private $minor = 0;
 
     /**
      * Patch version
      *
      * @var int
-     **/
+     */
     private $patch = 0;
 
     /**
@@ -67,8 +54,7 @@ abstract class Versionable
     /**
      * Set the major of the Version
      *
-     * @param  int $prefix
-     *
+     * @param int $prefix
      * @return Versionable
      */
     public function setPrefix($prefix)
@@ -91,8 +77,7 @@ abstract class Versionable
     /**
      * Set the major of the Version
      *
-     * @param  int $major
-     *
+     * @param int $major
      * @return Versionable
      */
     public function setMajor($major)
@@ -115,8 +100,7 @@ abstract class Versionable
     /**
      * Set the minor of the Version
      *
-     * @param  int $minor
-     *
+     * @param int $minor
      * @return Versionable
      */
     public function setMinor($minor)
@@ -139,8 +123,7 @@ abstract class Versionable
     /**
      * Set the patch of the version
      *
-     * @param  int $patch
-     *
+     * @param int $patch
      * @return Versionable
      */
     public function setPatch($patch)
@@ -160,7 +143,6 @@ abstract class Versionable
 
     /**
      * @param bool $selectLastPatch
-     *
      * @return Versionable
      */
     public function setSelectLastPatch($selectLastPatch)
@@ -174,16 +156,16 @@ abstract class Versionable
      * To strings
      *
      * @return string
-     **/
+     */
     public function __toString()
     {
         if ($this->getMajor() === 4 || $this->getMajor() === 3) {
-            $format = "%s%d.%02d.%d";
+            $format = '%s%d.%02d.%d';
         } else {
-            $format = "%s%d.%d.%d";
+            $format = '%s%d.%d.%d';
         }
 
-        return sprintf(
+        return \sprintf(
             $format,
             $this->getPrefix(),
             $this->getMajor(),

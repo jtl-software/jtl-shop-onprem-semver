@@ -1,15 +1,9 @@
 <?php
-/**
- * bootstrap.php
- *
- * Bootstrap for PHPUnit
- */
 
-// Naneau Autoloader
-spl_autoload_register(function ($className) {
+spl_autoload_register(static function ($className) {
 
     // Only load "Abc" classes
-    if (substr($className, 0, 6) !== 'JTLShop') {
+    if (strpos($className, 'JTLShop') !== 0) {
         return false;
     }
 

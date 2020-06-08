@@ -1,21 +1,13 @@
 <?php
-/**
- * VersionCollection.php
- *
- * @category        JTLShop
- * @package         SemVer
- */
 
 namespace JTLShop\SemVer;
 
-
 /**
- * Sort
+ * Class VersionCollection
  *
  * Sorting sets of SemVer Versions
  *
- * @category        JTLShop
- * @package         SemVer
+ * @package JTLShop\SemVer
  */
 class VersionCollection extends \ArrayIterator
 {
@@ -23,7 +15,7 @@ class VersionCollection extends \ArrayIterator
      * VersionCollection constructor.
      *
      * @param array $versionArr
-     * @param int $flags
+     * @param int   $flags
      */
     public function __construct(array $versionArr = [], $flags = 0)
     {
@@ -57,17 +49,15 @@ class VersionCollection extends \ArrayIterator
      */
     public function getLatestBuild($version)
     {
-        $version = Version::parse($version);
+        $version            = Version::parse($version);
         $latestBuildVersion = null;
-        $relatedVersions = $this->getBuilds($version);
+        $relatedVersions    = $this->getBuilds($version);
 
         foreach ($relatedVersions as $relatedVersion) {
             if (empty($latestBuildVersion)) {
                 $latestBuildVersion = $relatedVersion;
-            } else {
-                if ($relatedVersion->greaterThan($latestBuildVersion)) {
-                    $latestBuildVersion = $relatedVersion;
-                }
+            } elseif ($relatedVersion->greaterThan($latestBuildVersion)) {
+                $latestBuildVersion = $relatedVersion;
             }
         }
 
@@ -81,7 +71,7 @@ class VersionCollection extends \ArrayIterator
      */
     public function getMinors($version)
     {
-        $version = Version::parse($version);
+        $version         = Version::parse($version);
         $relatedVersions = [];
         foreach ($this as $vcVersion) {
             if ($vcVersion->getMajor() === $version->getMajor()) {
@@ -99,7 +89,7 @@ class VersionCollection extends \ArrayIterator
      */
     public function getBuilds($version)
     {
-        $version = Version::parse($version);
+        $version         = Version::parse($version);
         $relatedVersions = [];
         foreach ($this as $vcVersion) {
             if ($vcVersion->getMajor() === $version->getMajor() && $vcVersion->getMinor() === $version->getMinor()) {
@@ -119,7 +109,7 @@ class VersionCollection extends \ArrayIterator
     public function getVersionRange($start, $end)
     {
         $startKey = 0;
-        $endKey = 0;
+        $endKey   = 0;
 
         foreach ($this as $key => $version) {
             if ($version->equals(Version::parse($start))) {
@@ -151,8 +141,8 @@ class VersionCollection extends \ArrayIterator
     public function versionExists($version)
     {
         $exists = false;
-
-        array_walk($this->getArrayCopy(), function (Version $item) use (&$exists, $version) {
+        $copy   = $this->getArrayCopy();
+        \array_walk($copy, static function (Version $item) use (&$exists, $version) {
             if ($item->equals($version)) {
                 $exists = true;
             }
