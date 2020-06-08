@@ -1,22 +1,15 @@
 <?php
-/**
- * Regex.php
- *
- * @category        Naneau
- * @package         SemVer
- */
 
 namespace JTLShop\SemVer;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
- * Regex
+ * Class Regex
  *
  * Regex matching and parsing for SemVer strings
  *
- * @category        Naneau
- * @package         SemVer
+ * @package JTLShop\SemVer
  */
 class Regex
 {
@@ -24,9 +17,13 @@ class Regex
      * Single SemVer expression
      *
      * @var string
-     **/
-    private static $versionStr = '/^(?<version>v?[0-9]+\.[0-9]+(?:\.[0-9]+)?)(?<prerelease>-[0-9a-zA-Z.]+)?(?<build>\+[0-9a-zA-Z.]+)?$/';
+     */
+    private static $versionStr = '/^(?<version>v?[0-9]+\.[0-9]+(?:\.[0-9]+)?)'
+    . '(?<prerelease>-[0-9a-zA-Z.]+)?(?<build>\+[0-9a-zA-Z.]+)?$/';
 
+    /**
+     * @var string
+     */
     private static $versionNum = '/^(?<version>(\d)(\d{2})(\d{1})?)$/';
 
     /**
@@ -39,26 +36,26 @@ class Regex
      *  - prerelease
      *  - build
      *
+     * @param string $string
+     * @return array[string]string
      * @throws InvalidArgumentException
      *
-     * @param  string              $string
-     * @return array[string]string
-     **/
+     */
     public static function matchSemVer($string)
     {
         // Array of matches for PCRE
         $matches = array();
 
         // Match the possible parts of a SemVer
-        $matchedStr = preg_match(
+        $matchedStr = \preg_match(
             self::$versionStr,
             $string,
             $matches
         );
 
-        if  (!$matchedStr) {
+        if (!$matchedStr) {
             // Match the possible parts of a SemVer
-            $matchedNum = preg_match(
+            $matchedNum = \preg_match(
                 self::$versionNum,
                 $string,
                 $matches
@@ -70,10 +67,10 @@ class Regex
                 );
             }
 
-            $fullString = $matches[2].'.'.$matches[3];
+            $fullString = $matches[2] . '.' . $matches[3];
 
             if (isset($matches[4])) {
-                $fullString .= '.'.$matches[4];
+                $fullString .= '.' . $matches[4];
             }
 
             return ['version' => $matches['version'], $matches[0], $fullString];

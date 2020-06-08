@@ -8,8 +8,7 @@
 
 use JTLShop\SemVer\Parser;
 use JTLShop\SemVer\Sort as Sorter;
-
-use \PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 
 /**
  * SortTest

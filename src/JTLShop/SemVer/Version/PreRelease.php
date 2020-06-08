@@ -1,22 +1,10 @@
 <?php
-/**
- * PreRelease.php
- *
- * @category        Naneau
- * @package         SemVer
- * @subpackage      Version
- */
 
 namespace JTLShop\SemVer\Version;
 
 /**
- * PreRelease
- *
- * Pre release version status
- *
- * @category        Naneau
- * @package         SemVer
- * @subpackage      Version
+ * Class PreRelease
+ * @package JTLShop\SemVer\Version
  */
 class PreRelease extends Versionable
 {
@@ -24,14 +12,14 @@ class PreRelease extends Versionable
      * "Greek" name
      *
      * @var string
-     **/
+     */
     private $greek;
 
     /**
      * Release number
      *
      * @var int
-     **/
+     */
     private $releaseNumber = 0;
 
     /**
@@ -84,7 +72,7 @@ class PreRelease extends Versionable
      * Get string representation
      *
      * @return string
-     **/
+     */
     public function __toString()
     {
         if ($this->getMajor() > 0 || $this->getMinor() > 0 || $this->getPatch() > 0) {
@@ -94,7 +82,7 @@ class PreRelease extends Versionable
         $preReleaseStr = $this->getGreek();
 
         if ($this->getReleaseNumber() > 0) {
-            $preReleaseStr .= '.'.$this->getReleaseNumber();
+            $preReleaseStr .= '.' . $this->getReleaseNumber();
         }
 
         return $preReleaseStr;

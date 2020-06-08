@@ -2,8 +2,7 @@
 
 use JTLShop\SemVer\Compare;
 use JTLShop\SemVer\Parser;
-
-use \PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 
 /**
  * CompareTest

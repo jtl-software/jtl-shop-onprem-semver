@@ -1,25 +1,12 @@
 <?php
-/**
- * Sort.php
- *
- * @category        Naneau
- * @package         SemVer
- */
 
 namespace JTLShop\SemVer;
 
-use JTLShop\SemVer\Parser;
-use JTLShop\SemVer\Version;
-
-use \InvalidArgumentException as InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
- * Sort
- *
- * Sorting sets of SemVer Versions
- *
- * @category        Naneau
- * @package         SemVer
+ * Class Sort
+ * @package JTLShop\SemVer
  */
 class Sort
 {
@@ -40,30 +27,26 @@ class Sort
      * ...
      * @param  string|Version       $vn
      * @return array[int]SemVer
-     **/
+     */
     public static function sort()
     {
-        $arguments = func_get_args();
+        $arguments = \func_get_args();
 
-        if (count($arguments) === 0) {
+        if (\count($arguments) === 0) {
             return array();
         }
-
-        // Versions array
-        $versions = array();
-
         // If the first argument is an array, use that
-        if (is_array($arguments[0])) {
+        if (\is_array($arguments[0])) {
             $versions = $arguments[0];
         } else {
             $versions = $arguments;
         }
 
         // Parse into Version isntances
-        foreach($versions as $key => $version) {
+        foreach ($versions as $key => $version) {
             if ($version instanceof Version) {
                 $versions[$key] = $version;
-            } else if (is_string($version)) {
+            } elseif (\is_string($version)) {
                 $versions[$key] = Parser::parse($version);
             } else {
                 throw new InvalidArgumentException(
@@ -85,18 +68,18 @@ class Sort
      *
      * @param array[int]Version
      * @return array[int]Version
-     **/
+     */
     public static function sortArray(array $versions)
     {
         // Empty array does not needs sorting
-        if (count($versions) === 0) {
+        if (\count($versions) === 0) {
             return array();
         }
 
         // Array of one item (pivot) from the middle
-        $pivotArray = array_splice(
+        $pivotArray = \array_splice(
             $versions,
-            (int) floor((count($versions) - 1) / 2),
+            (int)\floor((count($versions) - 1) / 2),
             1
         );
 
@@ -105,7 +88,7 @@ class Sort
         $greater = array();
 
         // Fill stacks
-        foreach($versions as $version) {
+        foreach ($versions as $version) {
             if (Compare::greaterThan($version, $pivotArray[0])) {
                 $greater[] = $version;
             } else {
@@ -114,7 +97,7 @@ class Sort
         }
 
         // Recurse and merge results
-        return array_merge(
+        return \array_merge(
             self::sortArray($smaller),
             $pivotArray,
             self::sortArray($greater)
