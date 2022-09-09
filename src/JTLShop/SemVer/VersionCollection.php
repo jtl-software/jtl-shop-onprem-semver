@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace JTLShop\SemVer;
 
@@ -17,14 +17,14 @@ class VersionCollection extends \ArrayIterator
      * @param array $versionArr
      * @param int   $flags
      */
-    public function __construct(array $versionArr = [], $flags = 0)
+    public function __construct(array $versionArr = [], int $flags = 0)
     {
         $versions = [];
 
         foreach ($versionArr as $version) {
             try {
                 $versions[] = Version::parse($version);
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 $versions[] = Version::parse($version->reference);
             }
         }
@@ -35,7 +35,7 @@ class VersionCollection extends \ArrayIterator
     /**
      * @param Version|string $value
      */
-    public function append($value)
+    public function append($value): void
     {
         $value = Version::parse($value);
 
@@ -44,7 +44,6 @@ class VersionCollection extends \ArrayIterator
 
     /**
      * @param Version|string $version
-     *
      * @return mixed|null
      */
     public function getLatestBuild($version)
@@ -66,10 +65,9 @@ class VersionCollection extends \ArrayIterator
 
     /**
      * @param Version|string $version
-     *
      * @return VersionCollection
      */
-    public function getMinors($version)
+    public function getMinors($version): self
     {
         $version         = Version::parse($version);
         $relatedVersions = [];
@@ -84,10 +82,9 @@ class VersionCollection extends \ArrayIterator
 
     /**
      * @param Version|string $version
-     *
      * @return VersionCollection
      */
-    public function getBuilds($version)
+    public function getBuilds($version): self
     {
         $version         = Version::parse($version);
         $relatedVersions = [];
@@ -103,14 +100,12 @@ class VersionCollection extends \ArrayIterator
     /**
      * @param string|int|Version $start
      * @param string|int|Version $end
-     *
      * @return VersionCollection
      */
-    public function getVersionRange($start, $end)
+    public function getVersionRange($start, $end): self
     {
         $startKey = 0;
         $endKey   = 0;
-
         foreach ($this as $key => $version) {
             if ($version->equals(Version::parse($start))) {
                 $startKey = $key;
@@ -135,10 +130,9 @@ class VersionCollection extends \ArrayIterator
 
     /**
      * @param Version|string $version
-     *
      * @return bool
      */
-    public function versionExists($version)
+    public function versionExists($version): bool
     {
         $exists = false;
         $copy   = $this->getArrayCopy();
@@ -153,14 +147,13 @@ class VersionCollection extends \ArrayIterator
 
     /**
      * @param $currentVersion
-     *
      * @return Version|string|null
      */
     public function getNextVersion($currentVersion)
     {
         foreach ($this as $key => $version) {
             if ($version->equals($currentVersion)) {
-                return isset($this[($key + 1)]) ? $this[($key + 1)] : null;
+                return $this[($key + 1)] ?? null;
             }
         }
 

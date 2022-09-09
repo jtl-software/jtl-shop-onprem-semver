@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace JTLShop\SemVer;
 
@@ -27,13 +27,14 @@ class Sort
      * ...
      * @param  string|Version       $vn
      * @return array[int]SemVer
+     * @throws InvalidArgumentException
      */
     public static function sort()
     {
         $arguments = \func_get_args();
 
         if (\count($arguments) === 0) {
-            return array();
+            return [];
         }
         // If the first argument is an array, use that
         if (\is_array($arguments[0])) {
@@ -49,9 +50,7 @@ class Sort
             } elseif (\is_string($version)) {
                 $versions[$key] = Parser::parse($version);
             } else {
-                throw new InvalidArgumentException(
-                    'Invalid version given, pass either Version instances or strings'
-                );
+                throw new InvalidArgumentException('Invalid version given, pass either Version instances or strings');
             }
         }
 
@@ -69,11 +68,11 @@ class Sort
      * @param array[int]Version
      * @return array[int]Version
      */
-    public static function sortArray(array $versions)
+    public static function sortArray(array $versions): array
     {
         // Empty array does not needs sorting
         if (\count($versions) === 0) {
-            return array();
+            return [];
         }
 
         // Array of one item (pivot) from the middle
@@ -82,10 +81,9 @@ class Sort
             (int)\floor((count($versions) - 1) / 2),
             1
         );
-
         // Smaller/greater than pivot stack
-        $smaller = array();
-        $greater = array();
+        $smaller = [];
+        $greater = [];
 
         // Fill stacks
         foreach ($versions as $version) {

@@ -1,12 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 spl_autoload_register(static function ($className) {
-
     // Only load "Abc" classes
-    if (strpos($className, 'JTLShop') !== 0) {
+    if (!str_starts_with($className, 'JTLShop')) {
         return false;
     }
-
     // Simple transliteration
     require_once __DIR__ . '/../src/' . str_replace('\\', '/', $className) . '.php';
 });

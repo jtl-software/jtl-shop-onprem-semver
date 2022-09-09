@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace JTLShop\SemVer;
 
@@ -21,62 +21,52 @@ class Compare
      *
      * @var array[int]string
      */
-    private static $greekPrecendence = array(
+    private static array $greekPrecendence = [
         'pre-alpha',
         'alpha',
         'pre-beta',
         'beta',
         'pre-rc',
         'rc'
-    );
+    ];
 
     /**
      * Get the greatest SemVer out of a set of Versions
      *
      * @return Version
+     * @throws InvalidArgumentException
      */
     public static function greatest()
     {
         // Versions given
         $versions = \func_get_args();
-
         // Number of versions given
-        $count = count($versions);
-
+        $count = \count($versions);
         // Make sure there's one
         if ($count === 0) {
             throw new InvalidArgumentException('No versions given');
         }
-
         // If the first argument is an array, use that
         if (\is_array($versions[0])) {
             $versions = $versions[0];
             $count    = \count($versions);
         }
-
         // If there's only one, it is great. Very great.
         if ($count === 1) {
             return $versions[0];
         }
-
         // Get versions
-        $v1 = \array_shift($versions);
-        $v2 = \array_shift($versions);
-
+        $v1       = \array_shift($versions);
+        $v2       = \array_shift($versions);
+        $greatest = $v2;
         if (self::greaterThan($v1, $v2)) {
             $greatest = $v1;
-        } else {
-            $greatest = $v2;
         }
-
         // Recurse if there's versions left
         if (\count($versions) > 0) {
             return \call_user_func_array(
-                array(self::class, 'greatest'),
-                \array_merge(
-                    array($greatest),
-                    $versions
-                )
+                [self::class, 'greatest'],
+                \array_merge([$greatest], $versions)
             );
         }
 
@@ -90,7 +80,7 @@ class Compare
      * @param Version $v2
      * @return bool
      */
-    public static function equals(Version $v1, Version $v2)
+    public static function equals(Version $v1, Version $v2): bool
     {
         // Versionable part itself needs to be equal
         if (!self::versionableEquals($v1, $v2)) {
@@ -136,7 +126,7 @@ class Compare
      * @param Version $v2
      * @return bool
      */
-    public static function greaterThan(Version $v1, Version $v2)
+    public static function greaterThan(Version $v1, Version $v2): bool
     {
         // If they are equal, they can not be greater/smaller than each other
         if (self::equals($v1, $v2)) {
@@ -196,7 +186,7 @@ class Compare
      * @param Version $v2
      * @return bool
      */
-    public static function smallerThan(Version $v1, Version $v2)
+    public static function smallerThan(Version $v1, Version $v2): bool
     {
         // If it's equal it can not be smaller
         if (self::equals($v1, $v2)) {
@@ -216,7 +206,7 @@ class Compare
      * @param Versionable $v2
      * @return bool
      */
-    private static function versionableGreaterThan(Versionable $v1, Versionable $v2)
+    private static function versionableGreaterThan(Versionable $v1, Versionable $v2): bool
     {
         if ($v1->getMajor() > $v2->getMajor()) {
             return true;
@@ -251,7 +241,7 @@ class Compare
      * @param Versionable $v2
      * @return bool
      */
-    private static function versionableEquals(Versionable $v1, Versionable $v2)
+    private static function versionableEquals(Versionable $v1, Versionable $v2): bool
     {
         if ($v1->getMajor() !== $v2->getMajor()) {
             return false;
@@ -273,7 +263,7 @@ class Compare
      * @param Build $v2
      * @return bool
      */
-    private static function buildEquals(Build $v1, Build $v2)
+    private static function buildEquals(Build $v1, Build $v2): bool
     {
         return $v1->getNumber() === $v2->getNumber();
     }
@@ -285,7 +275,7 @@ class Compare
      * @param Build $v2
      * @return bool
      */
-    private static function buildGreaterThan(Build $v1, Build $v2)
+    private static function buildGreaterThan(Build $v1, Build $v2): bool
     {
         return $v1->getNumber() > $v2->getNumber();
     }
@@ -297,7 +287,7 @@ class Compare
      * @param PreRelease $v2
      * @return bool
      */
-    private static function preReleaseEquals(PreRelease $v1, PreRelease $v2)
+    private static function preReleaseEquals(PreRelease $v1, PreRelease $v2): bool
     {
         // If they don't match on the versionable level they can not match
         if (!self::versionableEquals($v1, $v2)) {
@@ -322,7 +312,7 @@ class Compare
      * @param PreRelease $v2
      * @return bool
      */
-    private static function preReleaseGreaterThan(PreRelease $v1, PreRelease $v2)
+    private static function preReleaseGreaterThan(PreRelease $v1, PreRelease $v2): bool
     {
         // Pre-releases can be denoted as versionable (X.Y.Z) or greek (alpha.5)
         // We let versionable take precedence
@@ -353,18 +343,19 @@ class Compare
      * @see SemVer::$greekPrecendence
      *
      */
-    private static function greekLargerThan($greek1, $greek2)
+    private static function greekLargerThan($greek1, $greek2): bool
     {
         // If they do not exist as valid precendence identifiers assume
         // bigger/smaller based on that
-        if (!\in_array($greek1, self::$greekPrecendence)) {
+        if (!\in_array($greek1, self::$greekPrecendence, true)) {
             return true;
         }
-        if (!\in_array($greek2, self::$greekPrecendence)) {
+        if (!\in_array($greek2, self::$greekPrecendence, true)) {
             return false;
         }
 
         // Use the index in precendence for comparison
-        return \array_search($greek1, self::$greekPrecendence) > \array_search($greek2, self::$greekPrecendence);
+        return \array_search($greek1, self::$greekPrecendence, true)
+            > \array_search($greek2, self::$greekPrecendence, true);
     }
 }
