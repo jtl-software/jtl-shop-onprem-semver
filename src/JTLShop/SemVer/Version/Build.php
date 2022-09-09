@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace JTLShop\SemVer\Version;
 
@@ -22,7 +22,7 @@ class Build
      *
      * @var array
      */
-    private $parts = array();
+    private array $parts = [];
 
     /**
      * Get the build number
@@ -70,8 +70,7 @@ class Build
      */
     public function setParts($parts)
     {
-        $this->parts = array();
-
+        $this->parts = [];
         foreach ($parts as $part) {
             $this->addPart($part);
         }
@@ -107,18 +106,15 @@ class Build
     {
         // If there are other parts
         if (\count($this->getParts()) > 0) {
-            $parts = array('build');
-
+            $parts = ['build'];
             // Add number if we have one
             if ($this->getNumber() !== null) {
                 $parts[] = $this->getNumber();
             }
-
             $parts[] = \implode('.', $this->getParts());
 
             return \implode('.', $parts);
         }
-
         // No number, no parts, no output.
         if ($this->getNumber() === null) {
             return '';

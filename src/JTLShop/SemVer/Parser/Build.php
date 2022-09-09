@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace JTLShop\SemVer\Parser;
 
@@ -33,9 +33,7 @@ class Build
         }
         // If the first part is a number it's the build number
         if (isset($parts[0]) && \is_numeric($parts[0])) {
-            $buildVersion->setNumber(
-                (int)\array_shift($parts)
-            );
+            $buildVersion->setNumber((int)\array_shift($parts));
         }
         // All other parts are custom and can simply be put on a stack
         foreach ($parts as $part) {

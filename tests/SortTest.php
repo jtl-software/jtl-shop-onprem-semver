@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * SortTest.php
  *
@@ -8,7 +8,7 @@
 
 use JTLShop\SemVer\Parser;
 use JTLShop\SemVer\Sort as Sorter;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * SortTest
@@ -25,7 +25,7 @@ class SortTest extends TestCase
      *
      * @return void
      **/
-    public function testSortStrings()
+    public function testSortStrings(): void
     {
         $v1 = '2.0.2';
         $v2 = '2.0.2';
@@ -77,7 +77,7 @@ class SortTest extends TestCase
      *
      * @return void
      **/
-    public function testSortArray()
+    public function testSortArray(): void
     {
         $v1 = Parser::parse('2.0.2');
         $v2 = Parser::parse('2.0.2');
@@ -86,7 +86,7 @@ class SortTest extends TestCase
         $v5 = Parser::parse('10.0.2-rc.1+build.12345'); // Biggest
         $v6 = Parser::parse('0.0.4');
 
-        $sorted = Sorter::sortArray(array($v1, $v2, $v3, $v4, $v5, $v6));
+        $sorted = Sorter::sortArray([$v1, $v2, $v3, $v4, $v5, $v6]);
 
         $this->assertCount(
             6,
@@ -122,11 +122,11 @@ class SortTest extends TestCase
     /**
      * Test sort of array
      *
-     * @expectedException InvalidArgumentException
      * @return void
      **/
-    public function testSortInvalid()
+    public function testSortInvalid(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         Sorter::sort('0.0.1', 2, '1.2.3');
     }
 }

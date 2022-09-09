@@ -1,13 +1,7 @@
-<?php
-/**
- * VersionNextTest.php
- *
- * @category        Naneau
- * @package         SemVer
- */
+<?php declare(strict_types=1);
 
 use JTLShop\SemVer\Parser;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * VersionNextTest
@@ -19,34 +13,34 @@ use PHPUnit_Framework_TestCase as TestCase;
  */
 class VersionNextTest extends TestCase
 {
-    public function testNextAcceptsNoArg()
+    public function testNextAcceptsNoArg(): void
     {
         $version = Parser::parse('1.0.0');
         $this->assertEquals('1.0.1', $version->next());
     }
 
-    public function testNextAcceptsEmpty()
+    public function testNextAcceptsEmpty(): void
     {
         $version = Parser::parse('1.0.0');
         $this->assertEquals('1.0.1', $version->next(false));
     }
 
-    public function testNextAcceptsString()
+    public function testNextAcceptsString(): void
     {
         $version = Parser::parse('1.0.0');
         $this->assertEquals('1.0.2', $version->next('1.0.2'));
     }
 
-    public function testNextThrowsExceptionOnUnhandledInputType()
+    public function testNextThrowsExceptionOnUnhandledInputType(): void
     {
-        $this->setExpectedException("InvalidArgumentException");
+        $this->expectException(InvalidArgumentException::class);
         $version = Parser::parse('1.0.0');
-        $version->next(new \stdclass);
+        $version->next(new stdclass());
     }
 
-    public function testNextThrowsExceptionOnPreReleaseBaseVersionWhenVersionNotPreRelease()
+    public function testNextThrowsExceptionOnPreReleaseBaseVersionWhenVersionNotPreRelease(): void
     {
-        $this->setExpectedException("InvalidArgumentException");
+        $this->expectException(InvalidArgumentException::class);
         $version = Parser::parse('1.0.0');
         $version->next('1.0.0-rc');
     }
@@ -54,17 +48,17 @@ class VersionNextTest extends TestCase
     /**
      * @dataProvider versionStringProvider
      */
-    public function test($expected, $base_str, $current_str)
+    public function test($expected, $base_str, $current_str): void
     {
-        $base = Parser::parse($base_str);
+        $base    = Parser::parse($base_str);
         $current = Parser::parse($current_str);
 
-        $this->assertEquals($expected, (string) $current->next($base));
+        $this->assertEquals($expected, (string)$current->next($base));
     }
 
-    public function versionStringProvider()
+    public function versionStringProvider(): array
     {
-        return array(
+        return [
             // Move to next significant release
             array('2.0.0', '2.0.0', '1.0.0'),
             array('1.2.0', '1.2.0', '1.1.0'),
@@ -88,6 +82,6 @@ class VersionNextTest extends TestCase
             // Ignore build string
             array('1.0.1', '1.0.0', '1.0.0+123421'),
             array('1.0.0-beta.1', '1.0.0-beta', '1.0.0-beta.0+123421'),
-        );
+        ];
     }
 }

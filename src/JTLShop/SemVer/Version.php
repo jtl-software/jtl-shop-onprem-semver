@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace JTLShop\SemVer;
 
@@ -248,7 +248,7 @@ class Version extends Versionable
      * @param Version|string $v2
      * @return bool
      */
-    public function greaterThan($v2)
+    public function greaterThan($v2): bool
     {
         return Compare::greaterThan($this, self::parse($v2));
     }
@@ -259,7 +259,7 @@ class Version extends Versionable
      * @param Version|string $v2
      * @return bool
      */
-    public function smallerThan($v2)
+    public function smallerThan($v2): bool
     {
         return Compare::smallerThan($this, self::parse($v2));
     }
@@ -270,7 +270,7 @@ class Version extends Versionable
      * @param Version|string $v2
      * @return bool
      */
-    public function equals($v2)
+    public function equals($v2): bool
     {
         return Compare::equals($this, self::parse($v2));
     }

@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
 use JTLShop\SemVer\Parser;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParseTest
@@ -19,7 +19,7 @@ class ParseTest extends TestCase
      *
      * @return void
      **/
-    public function testVersionable()
+    public function testVersionable(): void
     {
         $v1 = Parser::parse('0.1.1-rc.1');
         $v2 = Parser::parse('1.111.2-alpha.1235+build.4');
@@ -28,67 +28,67 @@ class ParseTest extends TestCase
 
         // Major
         $this->assertEquals(
-            $v1->getMajor(),
             0,
+            $v1->getMajor(),
             'Major should parse'
         );
         $this->assertEquals(
-            $v2->getMajor(),
             1,
+            $v2->getMajor(),
             'Major should parse'
         );
         $this->assertEquals(
-            $v3->getMajor(),
             20,
+            $v3->getMajor(),
             'Major should parse'
         );
         $this->assertEquals(
-            $v4->getMajor(),
             4,
+            $v4->getMajor(),
             'v4 Major should parse'
         );
 
         // Minor
         $this->assertEquals(
-            $v1->getMinor(),
             1,
+            $v1->getMinor(),
             'Minor should parse'
         );
         $this->assertEquals(
-            $v2->getMinor(),
             111,
+            $v2->getMinor(),
             'Minor should parse'
         );
         $this->assertEquals(
-            $v3->getMinor(),
             0,
+            $v3->getMinor(),
             'Minor should parse'
         );
         $this->assertEquals(
-            $v4->getMinor(),
             6,
+            $v4->getMinor(),
             'v4 Minor should parse'
         );
 
         // Patch
         $this->assertEquals(
-            $v1->getPatch(),
             1,
+            $v1->getPatch(),
             'Patch should parse'
         );
         $this->assertEquals(
-            $v2->getPatch(),
             2,
+            $v2->getPatch(),
             'Patch should parse'
         );
         $this->assertEquals(
-            $v3->getPatch(),
             123,
+            $v3->getPatch(),
             'Patch should parse'
         );
         $this->assertEquals(
-            $v4->getPatch(),
             0,
+            $v4->getPatch(),
             'v4 Patch should parse'
         );
     }
@@ -98,56 +98,56 @@ class ParseTest extends TestCase
      *
      * @return void
      **/
-    public function testPreReleaseGreek()
+    public function testPreReleaseGreek(): void
     {
         // Greek string
         $this->assertEquals(
-            Parser::parse('0.0.1-alpha.1')->getPreRelease()->getGreek(),
-            'alpha'
+            'alpha',
+            Parser::parse('0.0.1-alpha.1')->getPreRelease()->getGreek()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-beta')->getPreRelease()->getGreek(),
-            'beta'
+            'beta',
+            Parser::parse('0.0.1-beta')->getPreRelease()->getGreek()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-rc.1')->getPreRelease()->getGreek(),
-            'rc'
+            'rc',
+            Parser::parse('0.0.1-rc.1')->getPreRelease()->getGreek()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-foo.1')->getPreRelease()->getGreek(),
-            'foo'
+            'foo',
+            Parser::parse('0.0.1-foo.1')->getPreRelease()->getGreek()
         );
 
         // Release number
         $this->assertEquals(
-            Parser::parse('0.0.1-alpha')->getPreRelease()->getReleaseNumber(),
-            0
+            0,
+            Parser::parse('0.0.1-alpha')->getPreRelease()->getReleaseNumber()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-alpha.1')->getPreRelease()->getReleaseNumber(),
-            1
+            1,
+            Parser::parse('0.0.1-alpha.1')->getPreRelease()->getReleaseNumber()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-beta.2')->getPreRelease()->getReleaseNumber(),
-            2
+            2,
+            Parser::parse('0.0.1-beta.2')->getPreRelease()->getReleaseNumber()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-rc.123')->getPreRelease()->getReleaseNumber(),
-            123
+            123,
+            Parser::parse('0.0.1-rc.123')->getPreRelease()->getReleaseNumber()
         );
 
         // Make sure versionable doesn't parse into positive ints
         $this->assertEquals(
-            Parser::parse('0.0.1-alpha.1')->getPreRelease()->getMajor(),
-            0
+            0,
+            Parser::parse('0.0.1-alpha.1')->getPreRelease()->getMajor()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-alpha.1')->getPreRelease()->getMinor(),
-            0
+            0,
+            Parser::parse('0.0.1-alpha.1')->getPreRelease()->getMinor()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-alpha.1')->getPreRelease()->getPatch(),
-            0
+            0,
+            Parser::parse('0.0.1-alpha.1')->getPreRelease()->getPatch()
         );
     }
 
@@ -156,29 +156,24 @@ class ParseTest extends TestCase
      *
      * @return void
      **/
-    public function testPreReleaseVersionable()
+    public function testPreReleaseVersionable(): void
     {
         $this->assertEquals(
-            Parser::parse('0.0.1-0.1.2')->getPreRelease()->getMajor(),
-            0
+            0,
+            Parser::parse('0.0.1-0.1.2')->getPreRelease()->getMajor()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-0.1.2')->getPreRelease()->getMinor(),
-            1
+            1,
+            Parser::parse('0.0.1-0.1.2')->getPreRelease()->getMinor()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-0.1.123')->getPreRelease()->getPatch(),
-            123
+            123,
+            Parser::parse('0.0.1-0.1.123')->getPreRelease()->getPatch()
         );
 
         // Make sure there are no greek parts
-        $this->assertEmpty(
-            Parser::parse('0.0.1-0.1.123')->getPreRelease()->getGreek()
-        );
-        $this->assertEquals(
-            Parser::parse('0.0.1-0.1.123')->getPreRelease()->__toString(),
-            '0.1.123'
-        );
+        $this->assertEmpty(Parser::parse('0.0.1-0.1.123')->getPreRelease()->getGreek());
+        $this->assertEquals('0.1.123', Parser::parse('0.0.1-0.1.123')->getPreRelease()->__toString());
     }
 
     /**
@@ -186,17 +181,11 @@ class ParseTest extends TestCase
      *
      * @return void
      **/
-    public function testBuildDetection()
+    public function testBuildDetection(): void
     {
-        $this->assertTrue(
-            Parser::parse('0.0.1+build.1')->hasBuild()
-        );
-        $this->assertFalse(
-            Parser::parse('0.0.1')->hasBuild()
-        );
-        $this->assertFalse(
-            Parser::parse('0.0.1-alpha.1')->hasBuild()
-        );
+        $this->assertTrue(Parser::parse('0.0.1+build.1')->hasBuild());
+        $this->assertFalse(Parser::parse('0.0.1')->hasBuild());
+        $this->assertFalse(Parser::parse('0.0.1-alpha.1')->hasBuild());
     }
 
     /**
@@ -204,23 +193,23 @@ class ParseTest extends TestCase
      *
      * @return void
      **/
-    public function testBuildNumber()
+    public function testBuildNumber(): void
     {
         $this->assertEquals(
-            Parser::parse('0.0.1+build.1')->getBuild()->getNumber(),
-            1
+            1,
+            Parser::parse('0.0.1+build.1')->getBuild()->getNumber()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1+build')->getBuild()->getNumber(),
-            0
+            0,
+            Parser::parse('0.0.1+build')->getBuild()->getNumber()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1-alpha.12345+build.3')->getBuild()->getNumber(),
-            3
+            3,
+            Parser::parse('0.0.1-alpha.12345+build.3')->getBuild()->getNumber()
         );
         $this->assertEquals(
-            Parser::parse('0.0.1+build.12345.aaaaaa')->getBuild()->getNumber(),
-            12345
+            12345,
+            Parser::parse('0.0.1+build.12345.aaaaaa')->getBuild()->getNumber()
         );
 
     }
@@ -230,80 +219,71 @@ class ParseTest extends TestCase
      *
      * @return void
      **/
-    public function testBuildParts()
+    public function testBuildParts(): void
     {
         $this->assertTrue(
-            in_array(
-                'aaaaaa',
-                Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
-            )
+            in_array('aaaaaa', Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts(), true)
         );
         $this->assertTrue(
-            in_array(
-                'bbbbbb',
-                Parser::parse('0.0.1+build.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
-            )
+            in_array('bbbbbb', Parser::parse('0.0.1+build.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts(), true)
         );
         $this->assertTrue(
-            in_array(
-                'cccccc',
-                Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
-            )
+            in_array('cccccc', Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts(), true)
         );
     }
 
     /**
      * Test invalid version
      *
-     * @expectedException InvalidArgumentException
      * @return void
      **/
-    public function testInvalid1()
+    public function testInvalid1(): void
     {
-        $v1 = Parser::parse('foo.1.1');
+        $this->expectException(InvalidArgumentException::class);
+        Parser::parse('foo.1.1');
     }
 
     /**
      * Test invalid version
      *
-     * @expectedException InvalidArgumentException
      * @return void
      **/
-    public function testInvalid2()
+    public function testInvalid2(): void
     {
-        $v1 = Parser::parse('0.foo.1');
+        $this->expectException(InvalidArgumentException::class);
+        Parser::parse('0.foo.1');
     }
 
     /**
      * Test invalid version
      *
-     * @expectedException InvalidArgumentException
      * @return void
      **/
-    public function testInvalid3()
+    public function testInvalid3(): void
     {
-        $v1 = Parser::parse('10.1.foo');
+        $this->expectException(InvalidArgumentException::class);
+        Parser::parse('10.1.foo');
     }
 
     /**
      * Test invalid version
      *
-     * @expectedException InvalidArgumentException
      * @return void
      **/
-    public function testInvalid4()
+    public function testInvalid4(): void
     {
-        $v1 = Parser::parse('0.0.0-!@#');
+        $this->expectException(InvalidArgumentException::class);
+        Parser::parse('0.0.0-!@#');
     }
 
     /**
      * Test invalid version
      *
-     * @expectedException InvalidArgumentException
      * @return void
      **/
-    public function testInvalid5()
+    public function testInvalid5(): void
     {
-        $v1 = Parser::parse('0.0.0-build.1+!@#');
+        $this->expectException(InvalidArgumentException::class);
+        Parser::parse('0.0.0-build.1+!@#');
     }
 }

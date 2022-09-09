@@ -1,13 +1,7 @@
-<?php
-/**
- * OriginalVersionTest.php
- *
- * @category        Naneau
- * @package         SemVer
- */
+<?php declare(strict_types=1);
 
 use JTLShop\SemVer\Parser;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * OriginalVersionTest
@@ -24,7 +18,7 @@ class OriginalVersionTest extends TestCase
      *
      * @return void
      **/
-    public function testStoreOriginalVersion()
+    public function testStoreOriginalVersion(): void
     {
         $version  = Parser::parse('0.0.0');
         $version2 = \JTLShop\SemVer\Version::parse(406);

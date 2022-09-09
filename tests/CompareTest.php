@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 use JTLShop\SemVer\Compare;
 use JTLShop\SemVer\Parser;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * CompareTest
@@ -20,7 +20,7 @@ class CompareTest extends TestCase
      *
      * @return void
      **/
-    public function testEquals()
+    public function testEquals(): void
     {
         $this->assertTrue(
             Compare::equals(
@@ -93,7 +93,7 @@ class CompareTest extends TestCase
      *
      * @return void
      **/
-    public function testCompareVersionable()
+    public function testCompareVersionable(): void
     {
         $this->assertVersionBiggerThan('2.0.2', '0.0.4');
         $this->assertVersionBiggerThan('1.2.3', '1.2.2');
@@ -119,7 +119,7 @@ class CompareTest extends TestCase
      *
      * @return void
      **/
-    public function testPreReleaseCompare()
+    public function testPreReleaseCompare(): void
     {
         // No prerelease versus pre-release
         $this->assertVersionBiggerThan('1.2.3', '1.2.3-alpha');
@@ -142,7 +142,7 @@ class CompareTest extends TestCase
      *
      * @return void
      **/
-    public function testBuildCompare()
+    public function testBuildCompare(): void
     {
         $this->assertVersionBiggerThan('1.2.3+build', '1.2.3');
         $this->assertVersionBiggerThan('1.2.3+build.2', '1.2.3+build.1');
@@ -154,7 +154,7 @@ class CompareTest extends TestCase
      *
      * @return void
      **/
-    public function testBuildAndPreReleaseCompare()
+    public function testBuildAndPreReleaseCompare(): void
     {
         $this->assertVersionBiggerThan('1.2.3+build', '1.2.3-rc.1');
         $this->assertVersionBiggerThan('1.2.3-rc.1+build', '1.2.3-rc.1');
@@ -168,7 +168,7 @@ class CompareTest extends TestCase
      *
      * @return void
      **/
-    public function testGreatest()
+    public function testGreatest(): void
     {
         $v1 = Parser::parse('0.1.2');
         $v2 = Parser::parse('0.1.2-rc.1');
@@ -197,7 +197,7 @@ class CompareTest extends TestCase
      *
      * @return void
      **/
-    private function assertVersionBiggerThan($v1String, $v2String)
+    private function assertVersionBiggerThan($v1String, $v2String): void
     {
         // Parse them
         $v1 = Parser::parse($v1String);
