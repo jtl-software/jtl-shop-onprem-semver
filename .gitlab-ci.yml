@@ -1,0 +1,14 @@
+stages:
+  - mergejob
+
+code_quality:
+  stage: mergejob
+  image: php:8.0-alpine
+  script:
+    - curl https://getcomposer.org/download/2.4.1/composer.phar -o composer.phar -s
+    - chmod a+x composer.phar
+    - ./composer.phar install
+    - ./vendor/phpunit/phpunit/phpunit
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: always
