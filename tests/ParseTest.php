@@ -33,7 +33,7 @@ class ParseTest extends TestCase
             'Major should parse'
         );
         $this->assertEquals(
-            1,
+            133,
             $v2->getMajor(),
             'Major should parse'
         );
