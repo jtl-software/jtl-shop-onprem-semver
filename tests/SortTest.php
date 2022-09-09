@@ -44,31 +44,31 @@ class SortTest extends TestCase
 
         $this->assertEquals(
             $v7,
-            (string) $sorted[0]
+            (string)$sorted[0]
         );
         $this->assertEquals(
             $v3,
-            (string) $sorted[1]
+            (string)$sorted[1]
         );
         $this->assertEquals(
             $v6,
-            (string) $sorted[2]
+            (string)$sorted[2]
         );
         $this->assertEquals(
-            (string) $sorted[3],
+            (string)$sorted[3],
             $v1
         );
         $this->assertEquals(
             $v1,
-            (string) $sorted[4]
+            (string)$sorted[4]
         );
         $this->assertEquals(
             $v4,
-            (string) $sorted[5]
+            (string)$sorted[5]
         );
         $this->assertEquals(
             $v5,
-            (string) $sorted[6]
+            (string)$sorted[6]
         );
     }
 

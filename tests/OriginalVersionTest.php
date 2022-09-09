@@ -26,7 +26,7 @@ class OriginalVersionTest extends TestCase
         $version->setMinor(1);
 
         $this->assertEquals('0.0.0', $version->getOriginalVersion());
-        $this->assertEquals('0.1.0', (string) $version);
-        $this->assertEquals('4.06.0', (string) $version2);
+        $this->assertEquals('0.1.0', (string)$version);
+        $this->assertEquals('4.06.0', (string)$version2);
     }
 }
