@@ -1,7 +1,7 @@
 stages:
   - mergejob
 
-code_quality:
+unit_testing:
   stage: mergejob
   image: php:8.0-alpine
   script:
