@@ -65,8 +65,8 @@ class Sort
      *
      * This method uses QuickSort for the actual sorting
      *
-     * @param array[int]Version
-     * @return array[int]Version
+     * @param Version[] $versions
+     * @return Version[]
      */
     public static function sortArray(array $versions): array
     {
@@ -78,7 +78,7 @@ class Sort
         // Array of one item (pivot) from the middle
         $pivotArray = \array_splice(
             $versions,
-            (int)\floor((count($versions) - 1) / 2),
+            (int)\floor((\count($versions) - 1) / 2),
             1
         );
         // Smaller/greater than pivot stack

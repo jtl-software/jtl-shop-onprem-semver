@@ -16,11 +16,11 @@ class Parser
     /**
      * Parse a string into a SemVer Version
      *
-     * @param string|int $string
+     * @param int|string $string
      * @return Version
      * @throws InvalidArgumentException
      */
-    public static function parse($string)
+    public static function parse(int|string $string): Version
     {
         $string  = (string)$string;
         $matches = Regex::matchSemVer($string);

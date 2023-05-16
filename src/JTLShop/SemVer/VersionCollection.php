@@ -33,7 +33,7 @@ class VersionCollection extends \ArrayIterator
     }
 
     /**
-     * @param Version|string $value
+     * @param Version|string|int $value
      */
     public function append($value): void
     {
@@ -43,10 +43,10 @@ class VersionCollection extends \ArrayIterator
     }
 
     /**
-     * @param Version|string $version
+     * @param int|string|Version $version
      * @return mixed|null
      */
-    public function getLatestBuild($version)
+    public function getLatestBuild(int|string|Version $version)
     {
         $version            = Version::parse($version);
         $latestBuildVersion = null;

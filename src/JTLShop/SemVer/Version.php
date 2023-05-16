@@ -16,61 +16,58 @@ class Version extends Versionable
     /**
      * Pre release version
      *
-     * @var PreRelease
+     * @var PreRelease|null
      */
-    private $preRelease;
+    private ?PreRelease $preRelease = null;
 
     /**
      * Build version
      *
-     * @var Build
+     * @var Build|null
      */
-    private $build;
+    private ?Build $build = null;
 
     /**
      * Original version string
      *
      * @var string
      */
-    private $originalVersionString;
+    private string $originalVersionString = '';
 
     /**
      * Set the original version string for later usage
      *
      * @param string $version
+     * @return $this
      */
-    public function setOriginalVersion($version)
+    public function setOriginalVersion(string $version): self
     {
         $this->originalVersionString = $version;
+
+        return $this;
     }
 
     /**
-     * Get the original version string
-     *
      * @return string
      */
-    public function getOriginalVersion()
+    public function getOriginalVersion(): string
     {
         return $this->originalVersionString;
     }
 
     /**
-     * Get the pre release version
-     *
      * @return PreRelease
      */
-    public function getPreRelease()
+    public function getPreRelease(): PreRelease
     {
         return $this->preRelease;
     }
 
     /**
-     * Set the pre release version
-     *
      * @param PreRelease $preRelease
-     * @return Version
+     * @return $this
      */
-    public function setPreRelease(PreRelease $preRelease)
+    public function setPreRelease(PreRelease $preRelease): self
     {
         $this->preRelease = $preRelease;
 
@@ -78,32 +75,26 @@ class Version extends Versionable
     }
 
     /**
-     * Does this Version have a pre release?
-     *
      * @return bool
      */
-    public function hasPreRelease()
+    public function hasPreRelease(): bool
     {
         return ($this->preRelease instanceof PreRelease);
     }
 
     /**
-     * Get the build
-     *
-     * @return Build
+     * @return Build|null
      */
-    public function getBuild()
+    public function getBuild(): ?Build
     {
         return $this->build;
     }
 
     /**
-     * Set the build
-     *
      * @param Build $build
-     * @return Version
+     * @return $this
      */
-    public function setBuild(Build $build)
+    public function setBuild(Build $build): self
     {
         $this->build = $build;
 
@@ -111,24 +102,24 @@ class Version extends Versionable
     }
 
     /**
-     * Does this Version have a Build?
+     * Does this Version have a build?
      *
      * @return bool
      */
-    public function hasBuild()
+    public function hasBuild(): bool
     {
-        return ($this->build instanceof Build);
+        return $this->build instanceof Build;
     }
 
     /**
      * Get the next logical version relative to the provided base version. If
      * no base is supplied, base will be the same as the current version.
      *
-     * @param Version|string|null $base
+     * @param mixed|null $base
      * @return Version
      * @throws InvalidArgumentException
      */
-    public function next($base = null)
+    public function next(mixed $base = null): self
     {
         //  Ensure that $base is a Version. Parse it if we must, use ourself if
         //  it is empty.
@@ -160,7 +151,7 @@ class Version extends Versionable
                 // safe use $this prerelease and just increment the release
                 // number.
                 $preRelease = $this->getPreRelease();
-                $pre        = new PreRelease;
+                $pre        = new PreRelease();
                 if (!empty($preRelease->getGreek())) {
                     $pre->setGreek($preRelease->getGreek());
                     $pre->setReleaseNumber($preRelease->getReleaseNumber() + 1);
@@ -189,7 +180,7 @@ class Version extends Versionable
      *
      * @return Version
      */
-    public function cleanCopy()
+    public function cleanCopy(): self
     {
         $version = new self();
 
@@ -230,10 +221,10 @@ class Version extends Versionable
     /**
      * Parse a new version or return an existing version
      *
-     * @param Version|string $version
+     * @param int|string|Version $version
      * @return Version
      */
-    public static function parse($version)
+    public static function parse(int|string|Version $version): self
     {
         if ($version instanceof self) {
             return $version;
@@ -245,10 +236,10 @@ class Version extends Versionable
     /**
      * Check if the version is greater than another version
      *
-     * @param Version|string $v2
+     * @param int|string|Version $v2
      * @return bool
      */
-    public function greaterThan($v2): bool
+    public function greaterThan(int|string|Version $v2): bool
     {
         return Compare::greaterThan($this, self::parse($v2));
     }
@@ -256,10 +247,10 @@ class Version extends Versionable
     /**
      * Check if the version is smaller than another version
      *
-     * @param Version|string $v2
+     * @param int|string|Version $v2
      * @return bool
      */
-    public function smallerThan($v2): bool
+    public function smallerThan(int|string|Version $v2): bool
     {
         return Compare::smallerThan($this, self::parse($v2));
     }
@@ -267,10 +258,10 @@ class Version extends Versionable
     /**
      * Check if the version is equals to another version
      *
-     * @param Version|string $v2
+     * @param int|string|Version $v2
      * @return bool
      */
-    public function equals($v2): bool
+    public function equals(int|string|Version $v2): bool
     {
         return Compare::equals($this, self::parse($v2));
     }

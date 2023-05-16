@@ -11,24 +11,24 @@ class PreRelease extends Versionable
     /**
      * "Greek" name
      *
-     * @var string
+     * @var string|null
      */
-    private $greek;
+    private ?string $greek = null;
 
     /**
      * Release number
      *
      * @var int
      */
-    private $releaseNumber = 0;
+    private int $releaseNumber = 0;
 
     /**
      * Set the "greek" name of the pre-release status
      *
      * @param string $greek
-     * @return PreRelease
+     * @return $this
      */
-    public function setGreek($greek)
+    public function setGreek(string $greek): self
     {
         $this->greek = $greek;
 
@@ -39,9 +39,9 @@ class PreRelease extends Versionable
      * Set the release number
      *
      * @param int $releaseNumber
-     * @return PreRelease
+     * @return $this
      */
-    public function setReleaseNumber($releaseNumber)
+    public function setReleaseNumber(int $releaseNumber): self
     {
         $this->releaseNumber = $releaseNumber;
 
@@ -51,9 +51,9 @@ class PreRelease extends Versionable
     /**
      * Get the "greek" name of the pre-release status
      *
-     * @return string
+     * @return string|null
      */
-    public function getGreek()
+    public function getGreek(): ?string
     {
         return $this->greek;
     }
@@ -63,7 +63,7 @@ class PreRelease extends Versionable
      *
      * @return int
      */
-    public function getReleaseNumber()
+    public function getReleaseNumber(): int
     {
         return $this->releaseNumber;
     }
@@ -78,13 +78,11 @@ class PreRelease extends Versionable
         if ($this->getMajor() > 0 || $this->getMinor() > 0 || $this->getPatch() > 0) {
             return parent::__toString();
         }
-
         $preReleaseStr = $this->getGreek();
-
         if ($this->getReleaseNumber() > 0) {
             $preReleaseStr .= '.' . $this->getReleaseNumber();
         }
 
-        return $preReleaseStr;
+        return $preReleaseStr ?? '';
     }
 }

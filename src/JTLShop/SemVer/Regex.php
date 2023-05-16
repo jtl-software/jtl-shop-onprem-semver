@@ -40,7 +40,7 @@ class Regex
      * @return array[string]string
      * @throws InvalidArgumentException
      */
-    public static function matchSemVer(string $string)
+    public static function matchSemVer(string $string): array
     {
         // Array of matches for PCRE
         $matches = [];

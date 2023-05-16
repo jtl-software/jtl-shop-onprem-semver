@@ -86,7 +86,6 @@ class Compare
         if (!self::versionableEquals($v1, $v2)) {
             return false;
         }
-
         // If only one has a pre-release, they're not equal
         if ($v1->hasPreRelease() && !$v2->hasPreRelease()) {
             return false;
@@ -94,7 +93,6 @@ class Compare
         if (!$v1->hasPreRelease() && $v2->hasPreRelease()) {
             return false;
         }
-
         // See if pre-releases are equal if both versions have one
         if ($v1->hasPreRelease()
             && $v2->hasPreRelease()
@@ -102,7 +100,6 @@ class Compare
         ) {
             return false;
         }
-
         // If only one has a build version, they're not equal
         if (!$v1->hasBuild() && $v2->hasBuild()) {
             return false;
@@ -110,7 +107,6 @@ class Compare
         if ($v1->hasBuild() && !$v2->hasBuild()) {
             return false;
         }
-
         // Compare the build version
         if ($v1->hasBuild() && $v2->hasBuild()) {
             return self::buildEquals($v1->getBuild(), $v2->getBuild());
@@ -132,22 +128,18 @@ class Compare
         if (self::equals($v1, $v2)) {
             return false;
         }
-
         // Compare on the major/minor/patch level if we can
         if (!self::versionableEquals($v1, $v2)) {
             return self::versionableGreaterThan($v1, $v2);
         }
-
         // v1 has a pre-release, but v2 does not, v2 is bigger
         if ($v1->hasPreRelease() && !$v2->hasPreRelease()) {
             return false;
         }
-
         // v1 does not have a pre-release, but v2 does, v1 is bigger
         if (!$v1->hasPreRelease() && $v2->hasPreRelease()) {
             return true;
         }
-
         // Compare on the re-release level if possible
         if ($v1->hasPreRelease()
             && $v2->hasPreRelease()
@@ -157,11 +149,9 @@ class Compare
             if (self::preReleaseGreaterThan($v1->getPreRelease(), $v2->getPreRelease())) {
                 return true;
             }
-
             // v2 has a larger pre-release than v1, v2 is bigger.
             return false;
         }
-
         // Both have the same pre-release version, but only one has a build
         // Version with a build is bigger
         if ($v1->hasBuild() && !$v2->hasBuild()) {
@@ -170,7 +160,6 @@ class Compare
         if (!$v1->hasBuild() && $v2->hasBuild()) {
             return false;
         }
-
         // Compare the build version
         if ($v1->hasBuild() && $v2->hasBuild()) {
             return self::buildGreaterThan($v1->getBuild(), $v2->getBuild());
@@ -188,11 +177,10 @@ class Compare
      */
     public static function smallerThan(Version $v1, Version $v2): bool
     {
-        // If it's equal it can not be smaller
+        // If it's equal it cannot be smaller
         if (self::equals($v1, $v2)) {
             return false;
         }
-
         // If it's not equal, and not greater, it must be smaller
         return !self::greaterThan($v1, $v2);
     }
@@ -214,19 +202,14 @@ class Compare
         if ($v1->getMajor() < $v2->getMajor()) {
             return false;
         }
-
         if ($v1->getMinor() > $v2->getMinor()) {
             return true;
         }
         if ($v1->getMinor() < $v2->getMinor()) {
             return false;
         }
-
         if ($v1->getPatch() > $v2->getPatch()) {
             return true;
-        }
-        if ($v1->getPatch() < $v2->getPatch()) {
-            return false;
         }
 
         return false;
@@ -293,7 +276,6 @@ class Compare
         if (!self::versionableEquals($v1, $v2)) {
             return false;
         }
-
         // Both other parts need to match
         if ($v1->getGreek() !== $v2->getGreek()) {
             return false;
@@ -320,12 +302,10 @@ class Compare
             // If v1 is bigger on the versionable level, it's bigger.
             return self::versionableGreaterThan($v1, $v2);
         }
-
         // "Greek" part is "bigger" for v1
         if ($v1->getGreek() !== $v2->getGreek()) {
             return self::greekLargerThan($v1->getGreek(), $v2->getGreek());
         }
-
         // Release number for v1 is bigger than v2's
         if ($v1->getReleaseNumber() > $v2->getReleaseNumber()) {
             return true;
@@ -353,7 +333,6 @@ class Compare
         if (!\in_array($greek2, self::$greekPrecendence, true)) {
             return false;
         }
-
         // Use the index in precendence for comparison
         return \array_search($greek1, self::$greekPrecendence, true)
             > \array_search($greek2, self::$greekPrecendence, true);

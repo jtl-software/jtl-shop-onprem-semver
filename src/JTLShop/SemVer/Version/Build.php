@@ -15,7 +15,7 @@ class Build
      *
      * @var int
      */
-    private $number;
+    private int $number = 0;
 
     /**
      * Parts
@@ -29,7 +29,7 @@ class Build
      *
      * @return int
      */
-    public function getNumber()
+    public function getNumber(): int
     {
         return $this->number;
     }
@@ -38,9 +38,9 @@ class Build
      * Set the build number
      *
      * @param int $number
-     * @return Build
+     * @return $this
      */
-    public function setNumber($number)
+    public function setNumber($number): self
     {
         if ($number < 0) {
             throw new InvalidArgumentException(
@@ -57,7 +57,7 @@ class Build
      *
      * @return array[int]string
      */
-    public function getParts()
+    public function getParts(): array
     {
         return $this->parts;
     }
@@ -66,9 +66,9 @@ class Build
      * Set the build parts
      *
      * @param array $parts
-     * @return Build
+     * @return $this
      */
-    public function setParts($parts)
+    public function setParts(array $parts): self
     {
         $this->parts = [];
         foreach ($parts as $part) {
@@ -82,12 +82,12 @@ class Build
      * Add a part to the build parts stack
      *
      * @param string $part
-     * @return Build
+     * @return $this
      */
-    public function addPart($part)
+    public function addPart(string $part): self
     {
         // Sanity check
-        if (!ctype_alnum($part)) {
+        if (!\ctype_alnum($part)) {
             throw new InvalidArgumentException(
                 'Build part "' . $part . '" is not alpha numerical'
             );
