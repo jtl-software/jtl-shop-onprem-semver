@@ -1,10 +1,4 @@
 <?php declare(strict_types=1);
-/**
- * SortTest.php
- *
- * @category        Naneau
- * @package         SemVer
- */
 
 use JTLShop\SemVer\Parser;
 use JTLShop\SemVer\Sort as Sorter;
@@ -12,11 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * SortTest
- *
- * Testing SemVer sorting
- *
- * @category        Naneau
- * @package         SemVer
  */
 class SortTest extends TestCase
 {

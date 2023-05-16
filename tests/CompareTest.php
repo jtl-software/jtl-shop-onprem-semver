@@ -6,12 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * CompareTest
- *
- * Testing the Compare class
- *
- * @category      Naneau
- * @package       SemVer
- * @subpackage    Tests
 **/
 class CompareTest extends TestCase
 {
@@ -76,14 +70,14 @@ class CompareTest extends TestCase
 
         $this->assertTrue(
             Compare::equals(
-                parser::parse('0.0.1-alpha.1+build.1'),
-                parser::parse('0.0.1-alpha.1+build.1')
+                Parser::parse('0.0.1-alpha.1+build.1'),
+                Parser::parse('0.0.1-alpha.1+build.1')
             )
         );
         $this->assertFalse(
             Compare::equals(
-                parser::parse('0.0.1-alpha.1+build.1'),
-                parser::parse('0.0.1-alpha.2+build.1')
+                Parser::parse('0.0.1-alpha.1+build.1'),
+                Parser::parse('0.0.1-alpha.2+build.1')
             )
         );
     }
@@ -102,14 +96,14 @@ class CompareTest extends TestCase
         // Check that versions that are equal are not bigger/smaller
         $this->assertFalse(
             Compare::greaterThan(
-                parser::parse('4.0.0'),
-                parser::parse('4.0.0')
+                Parser::parse('4.0.0'),
+                Parser::parse('4.0.0')
             )
         );
         $this->assertFalse(
             Compare::smallerThan(
-                parser::parse('4.0.0'),
-                parser::parse('4.0.0')
+                Parser::parse('4.0.0'),
+                Parser::parse('4.0.0')
             )
         );
     }
@@ -194,10 +188,11 @@ class CompareTest extends TestCase
 
     /**
      * Assert that of two version strings the first is bigger than the other
-     *
+     * @param string $v1String
+     * @param string $v2String
      * @return void
-     **/
-    private function assertVersionBiggerThan($v1String, $v2String): void
+     */
+    private function assertVersionBiggerThan(string $v1String, string $v2String): void
     {
         // Parse them
         $v1 = Parser::parse($v1String);

@@ -1,16 +1,11 @@
 <?php declare(strict_types=1);
 
 use JTLShop\SemVer\Parser;
+use JTLShop\SemVer\Version;
 use PHPUnit\Framework\TestCase;
 
 /**
  * ParseTest
- *
- * Testing the parsers
- *
- * @category      Naneau
- * @package       SemVer
- * @subpackage    Tests
 **/
 class ParseTest extends TestCase
 {
@@ -24,7 +19,8 @@ class ParseTest extends TestCase
         $v1 = Parser::parse('0.1.1-rc.1');
         $v2 = Parser::parse('1.111.2-alpha.1235+build.4');
         $v3 = Parser::parse('20.0.123+build.6');
-        $v4 = \JTLShop\SemVer\Version::parse(406);
+        $v4 = Version::parse(406);
+        $v5 = Version::parse('v5.3.12-beta1');
 
         // Major
         $this->assertEquals(
@@ -45,7 +41,12 @@ class ParseTest extends TestCase
         $this->assertEquals(
             4,
             $v4->getMajor(),
-            'v4 Major should parse'
+            'Major should parse'
+        );
+        $this->assertEquals(
+            5,
+            $v5->getMajor(),
+            'Major should parse'
         );
 
         // Minor
@@ -67,7 +68,12 @@ class ParseTest extends TestCase
         $this->assertEquals(
             6,
             $v4->getMinor(),
-            'v4 Minor should parse'
+            'Minor should parse'
+        );
+        $this->assertEquals(
+            3,
+            $v5->getMinor(),
+            'Minor should parse'
         );
 
         // Patch
@@ -89,7 +95,22 @@ class ParseTest extends TestCase
         $this->assertEquals(
             0,
             $v4->getPatch(),
-            'v4 Patch should parse'
+            'Patch should parse'
+        );
+        $this->assertEquals(
+            12,
+            $v5->getPatch(),
+            'Patch should parse'
+        );
+        $this->assertEquals(
+            'v',
+            $v5->getPrefix(),
+            'Prefix should parse'
+        );
+        $this->assertEquals(
+            null,
+            $v5->getBuild(),
+            'Build should parse'
         );
     }
 
@@ -221,14 +242,14 @@ class ParseTest extends TestCase
      **/
     public function testBuildParts(): void
     {
-        $this->assertTrue(
-            in_array('aaaaaa', Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts(), true)
+        $this->assertContains(
+            'aaaaaa', Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
         );
-        $this->assertTrue(
-            in_array('bbbbbb', Parser::parse('0.0.1+build.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts(), true)
+        $this->assertContains(
+            'bbbbbb', Parser::parse('0.0.1+build.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
         );
-        $this->assertTrue(
-            in_array('cccccc', Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts(), true)
+        $this->assertContains(
+            'cccccc', Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
         );
     }
 
