@@ -5,11 +5,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * CleanCopyVersionTest
- *
- * Testing Version::cleanCopy()
- *
- * @category        Naneau
- * @package         SemVer
  */
 class CleanCopyVersionTest extends TestCase
 {

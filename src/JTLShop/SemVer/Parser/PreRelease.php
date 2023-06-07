@@ -18,10 +18,10 @@ class PreRelease
     /**
      * Parse pre release version string
      *
-     * @param string
+     * @param string $string
      * @return PreReleaseVersion|\JTLShop\SemVer\Version\Versionable
      */
-    public static function parse($string)
+    public static function parse(string $string)
     {
         // Type X.Y.Z, can be parsed as Versionable
         if (\substr_count($string, '.') === 2) {
@@ -30,18 +30,14 @@ class PreRelease
         $preRelease = new PreReleaseVersion();
         $parts      = \explode('.', $string);
         // Sanity check
-        if (count($parts) === 0) {
+        if (\count($parts) === 0) {
             return $preRelease;
         }
         // Set the greek name
-        $preRelease->setGreek(
-            $parts[0]
-        );
+        $preRelease->setGreek($parts[0]);
         // If there's another part it's a release number
         if (isset($parts[1])) {
-            $preRelease->setReleaseNumber(
-                (int)$parts[1]
-            );
+            $preRelease->setReleaseNumber((int)$parts[1]);
         }
 
         return $preRelease;

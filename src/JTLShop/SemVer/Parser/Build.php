@@ -18,7 +18,7 @@ class Build
      * @param string $string
      * @return BuildVersion
      */
-    public static function parse($string)
+    public static function parse(string $string): BuildVersion
     {
         // Explode over '.'
         $parts        = \explode('.', $string);

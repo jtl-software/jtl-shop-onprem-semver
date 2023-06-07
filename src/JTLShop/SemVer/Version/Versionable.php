@@ -11,53 +11,49 @@ abstract class Versionable
     /**
      * Prefix of version
      *
-     * @var int
+     * @var string|null
      */
-    private $prefix;
+    private ?string $prefix = null;
 
     /**
      * Major version
      *
      * @var int
      */
-    private $major = 0;
+    private int $major = 0;
 
     /**
      * Minor version
      *
      * @var int
      */
-    private $minor = 0;
+    private int $minor = 0;
 
     /**
      * Patch version
      *
      * @var int
      */
-    private $patch = 0;
+    private int $patch = 0;
 
     /**
      * @var bool
      */
-    private $selectLastPatch = false;
+    private bool $selectLastPatch = false;
 
     /**
-     * Get the major of the Version
-     *
-     * @return int
+     * @return string|null
      */
-    public function getPrefix()
+    public function getPrefix(): ?string
     {
         return $this->prefix;
     }
 
     /**
-     * Set the major of the Version
-     *
-     * @param int $prefix
-     * @return Versionable
+     * @param string|null $prefix
+     * @return $this
      */
-    public function setPrefix($prefix)
+    public function setPrefix(?string $prefix): self
     {
         $this->prefix = $prefix;
 
@@ -65,22 +61,18 @@ abstract class Versionable
     }
 
     /**
-     * Get the major of the Version
-     *
      * @return int
      */
-    public function getMajor()
+    public function getMajor(): int
     {
         return $this->major;
     }
 
     /**
-     * Set the major of the Version
-     *
      * @param int $major
      * @return Versionable
      */
-    public function setMajor($major)
+    public function setMajor(int $major): self
     {
         $this->major = $major;
 
@@ -88,22 +80,18 @@ abstract class Versionable
     }
 
     /**
-     * Get the minor of the Version
-     *
      * @return int
      */
-    public function getMinor()
+    public function getMinor(): int
     {
         return $this->minor;
     }
 
     /**
-     * Set the minor of the Version
-     *
      * @param int $minor
      * @return Versionable
      */
-    public function setMinor($minor)
+    public function setMinor(int $minor): self
     {
         $this->minor = $minor;
 
@@ -111,22 +99,18 @@ abstract class Versionable
     }
 
     /**
-     * Get the patch of the version
-     *
      * @return int
      */
-    public function getPatch()
+    public function getPatch(): int
     {
         return $this->patch;
     }
 
     /**
-     * Set the patch of the version
-     *
      * @param int $patch
      * @return Versionable
      */
-    public function setPatch($patch)
+    public function setPatch(int $patch): self
     {
         $this->patch = $patch;
 
@@ -136,7 +120,7 @@ abstract class Versionable
     /**
      * @return bool
      */
-    public function isSelectLastPatch()
+    public function isSelectLastPatch(): bool
     {
         return $this->selectLastPatch;
     }
@@ -145,7 +129,7 @@ abstract class Versionable
      * @param bool $selectLastPatch
      * @return Versionable
      */
-    public function setSelectLastPatch($selectLastPatch)
+    public function setSelectLastPatch(bool $selectLastPatch): self
     {
         $this->selectLastPatch = $selectLastPatch;
 
@@ -153,20 +137,12 @@ abstract class Versionable
     }
 
     /**
-     * To strings
-     *
      * @return string
      */
     public function __toString()
     {
-        if ($this->getMajor() === 4 || $this->getMajor() === 3) {
-            $format = '%s%d.%02d.%d';
-        } else {
-            $format = '%s%d.%d.%d';
-        }
-
         return \sprintf(
-            $format,
+            '%s%d.%d.%d',
             $this->getPrefix(),
             $this->getMajor(),
             $this->getMinor(),

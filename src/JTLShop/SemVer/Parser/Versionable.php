@@ -24,22 +24,19 @@ class Versionable
      * @return Version|PreRelease|Build
      * @throws InvalidArgumentException
      */
-    public static function parse($string, $className)
+    public static function parse(string $string, string $className)
     {
         // Sanity check
-        if (\substr_count($string, '.') < 1 && \substr_count($string, '.') > 2) {
+        if (\substr_count($string, '.') < 1 || \substr_count($string, '.') > 2) {
             throw new InvalidArgumentException(
                 'part "' . $string . '" can not be parsed into a SemVer'
                 . ' major.minor.patch version'
             );
         }
-
         // Simple explode will do here
         $parts = \explode('.', $string);
-
         // Instantiate
         $versionable = new $className();
-
         // Sanity check of class type
         if (!($versionable instanceof Version || $versionable instanceof PreRelease || $versionable instanceof Build)) {
             throw new InvalidArgumentException(
@@ -49,18 +46,16 @@ class Versionable
 
         // Set prefix, if it exists
         \preg_match('/^([a-z])?([0-9]+)$/', $parts[0], $m);
-        $praefix = !empty($m[1]) ? $m[1] : null;
+        $prefix = !empty($m[1]) ? $m[1] : null;
         $build   = $m[2];
-
         // Check if patch exists
         if (isset($parts[2])) {
             $versionable->setPatch((int)$parts[2]);
         } else {
             $versionable->setSelectLastPatch(true);
         }
-
         // Versionable parts
-        $versionable->setPrefix($praefix)
+        $versionable->setPrefix($prefix)
             ->setMajor((int)$build)
             ->setMinor((int)$parts[1]);
 
