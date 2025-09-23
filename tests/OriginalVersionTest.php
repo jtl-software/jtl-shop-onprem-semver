@@ -1,19 +1,18 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
+namespace JTLShop\SemVer\Tests;
 
 use JTLShop\SemVer\Parser;
 use JTLShop\SemVer\Version;
 use PHPUnit\Framework\TestCase;
 
-/**
- * OriginalVersionTest
- */
 class OriginalVersionTest extends TestCase
 {
     /**
      * Test sort of strings
-     *
-     * @return void
-     **/
+     */
     public function testStoreOriginalVersion(): void
     {
         $version  = Parser::parse('0.0.0');

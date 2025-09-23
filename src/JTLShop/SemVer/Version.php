@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace JTLShop\SemVer;
 
@@ -8,38 +10,16 @@ use JTLShop\SemVer\Version\PreRelease;
 use JTLShop\SemVer\Version\Versionable;
 
 /**
- * Class Version
  * @package JTLShop\SemVer
  */
 class Version extends Versionable
 {
-    /**
-     * Pre release version
-     *
-     * @var PreRelease|null
-     */
     private ?PreRelease $preRelease = null;
 
-    /**
-     * Build version
-     *
-     * @var Build|null
-     */
     private ?Build $build = null;
 
-    /**
-     * Original version string
-     *
-     * @var string
-     */
     private string $originalVersionString = '';
 
-    /**
-     * Set the original version string for later usage
-     *
-     * @param string $version
-     * @return $this
-     */
     public function setOriginalVersion(string $version): self
     {
         $this->originalVersionString = $version;
@@ -47,26 +27,19 @@ class Version extends Versionable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getOriginalVersion(): string
     {
         return $this->originalVersionString;
     }
 
-    /**
-     * @return PreRelease
-     */
     public function getPreRelease(): PreRelease
     {
+        if ($this->preRelease === null) {
+            throw new InvalidArgumentException('PreRelease not set');
+        }
         return $this->preRelease;
     }
 
-    /**
-     * @param PreRelease $preRelease
-     * @return $this
-     */
     public function setPreRelease(PreRelease $preRelease): self
     {
         $this->preRelease = $preRelease;
@@ -74,26 +47,19 @@ class Version extends Versionable
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasPreRelease(): bool
     {
         return ($this->preRelease instanceof PreRelease);
     }
 
-    /**
-     * @return Build|null
-     */
-    public function getBuild(): ?Build
+    public function getBuild(): Build
     {
+        if ($this->build === null) {
+            throw new InvalidArgumentException('Build not set');
+        }
         return $this->build;
     }
 
-    /**
-     * @param Build $build
-     * @return $this
-     */
     public function setBuild(Build $build): self
     {
         $this->build = $build;
@@ -101,11 +67,6 @@ class Version extends Versionable
         return $this;
     }
 
-    /**
-     * Does this Version have a build?
-     *
-     * @return bool
-     */
     public function hasBuild(): bool
     {
         return $this->build instanceof Build;
@@ -115,8 +76,6 @@ class Version extends Versionable
      * Get the next logical version relative to the provided base version. If
      * no base is supplied, base will be the same as the current version.
      *
-     * @param mixed|null $base
-     * @return Version
      * @throws InvalidArgumentException
      */
     public function next(mixed $base = null): self
@@ -161,8 +120,9 @@ class Version extends Versionable
 
                 $next->setPreRelease($pre);
             } else {
-                throw new InvalidArgumentException('This version has left prerelease without updating the base.
-                 Base should not be prerelease.');
+                throw new InvalidArgumentException(
+                    'This version has left prerelease without updating the base. Base should not be prerelease.'
+                );
             }
         } elseif (!$this->hasPreRelease()) {
             $next->setPatch($this->getPatch() + 1);
@@ -177,8 +137,6 @@ class Version extends Versionable
     /**
      * Create a new Version that discards the entity information of build and
      * originalVersionString
-     *
-     * @return Version
      */
     public function cleanCopy(): self
     {
@@ -188,7 +146,6 @@ class Version extends Versionable
         $version->setMajor($this->getMajor());
         $version->setMinor($this->getMinor());
         $version->setPatch($this->getPatch());
-
         if ($this->hasPreRelease()) {
             $version->preRelease = clone($this->getPreRelease());
         }
@@ -196,12 +153,7 @@ class Version extends Versionable
         return $version;
     }
 
-    /**
-     * String representation of this Version
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         $string = parent::__toString();
 
@@ -220,9 +172,6 @@ class Version extends Versionable
 
     /**
      * Parse a new version or return an existing version
-     *
-     * @param int|string|Version $version
-     * @return Version
      */
     public static function parse(int|string|Version $version): self
     {
@@ -235,9 +184,6 @@ class Version extends Versionable
 
     /**
      * Check if the version is greater than another version
-     *
-     * @param int|string|Version $v2
-     * @return bool
      */
     public function greaterThan(int|string|Version $v2): bool
     {
@@ -246,9 +192,6 @@ class Version extends Versionable
 
     /**
      * Check if the version is smaller than another version
-     *
-     * @param int|string|Version $v2
-     * @return bool
      */
     public function smallerThan(int|string|Version $v2): bool
     {
@@ -257,9 +200,6 @@ class Version extends Versionable
 
     /**
      * Check if the version is equals to another version
-     *
-     * @param int|string|Version $v2
-     * @return bool
      */
     public function equals(int|string|Version $v2): bool
     {

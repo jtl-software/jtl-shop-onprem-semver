@@ -3,12 +3,14 @@ stages:
 
 unit_testing:
   stage: mergejob
-  image: php:8.0-alpine
+  image: php:8.3-alpine
   script:
-    - curl https://getcomposer.org/download/2.4.1/composer.phar -o composer.phar -s
+    - curl https://getcomposer.org/download/2.8.12/composer.phar -o composer.phar -s
     - chmod a+x composer.phar
     - ./composer.phar install
-    - ./vendor/phpunit/phpunit/phpunit
+    - ./vendor/bin/phpunit
+    - ./vendor/bin/phpstan analyse src tests -l10
+    - ./vendor/bin/phpcs src tests
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: always

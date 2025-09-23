@@ -1,11 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 
+declare(strict_types=1);
+
+namespace JTLShop\SemVer\Tests;
+
+use InvalidArgumentException;
 use JTLShop\SemVer\Parser;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
- * VersionNextTest
- *
  * Testing retrieving the next Version from a Version
  */
 class VersionNextTest extends TestCase
@@ -42,10 +47,8 @@ class VersionNextTest extends TestCase
         $version->next('1.0.0-rc');
     }
 
-    /**
-     * @dataProvider versionStringProvider
-     */
-    public function test($expected, $base_str, $current_str): void
+    #[DataProvider('versionStringProvider')]
+    public function test(string $expected, string $base_str, string $current_str): void
     {
         $base    = Parser::parse($base_str);
         $current = Parser::parse($current_str);
@@ -53,7 +56,10 @@ class VersionNextTest extends TestCase
         $this->assertEquals($expected, (string)$current->next($base));
     }
 
-    public function versionStringProvider(): array
+    /**
+     * @return array<string[]>
+     */
+    public static function versionStringProvider(): array
     {
         return [
             // Move to next significant release

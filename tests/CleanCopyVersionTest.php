@@ -1,11 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
+namespace JTLShop\SemVer\Tests;
 
 use JTLShop\SemVer\Parser;
 use PHPUnit\Framework\TestCase;
 
-/**
- * CleanCopyVersionTest
- */
 class CleanCopyVersionTest extends TestCase
 {
     public function testIncludesStandardVersion(): void

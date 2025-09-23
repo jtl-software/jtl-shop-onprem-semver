@@ -1,13 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace JTLShop\SemVer\Parser;
 
 use JTLShop\SemVer\Parser\Versionable as VersionableParser;
+use JTLShop\SemVer\Version;
 use JTLShop\SemVer\Version\PreRelease as PreReleaseVersion;
 
 /**
- * Class PreRelease
- *
  * PreRelease part parser uses Versionable parser for most of the grunt work,
  * but parses "greek" name, etc. as well.
  *
@@ -15,13 +16,7 @@ use JTLShop\SemVer\Version\PreRelease as PreReleaseVersion;
  */
 class PreRelease
 {
-    /**
-     * Parse pre release version string
-     *
-     * @param string $string
-     * @return PreReleaseVersion|\JTLShop\SemVer\Version\Versionable
-     */
-    public static function parse(string $string)
+    public static function parse(string $string): PreReleaseVersion|Version
     {
         // Type X.Y.Z, can be parsed as Versionable
         if (\substr_count($string, '.') === 2) {
@@ -29,10 +24,6 @@ class PreRelease
         }
         $preRelease = new PreReleaseVersion();
         $parts      = \explode('.', $string);
-        // Sanity check
-        if (\count($parts) === 0) {
-            return $preRelease;
-        }
         // Set the greek name
         $preRelease->setGreek($parts[0]);
         // If there's another part it's a release number

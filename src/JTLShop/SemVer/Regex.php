@@ -1,12 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace JTLShop\SemVer;
 
 use InvalidArgumentException;
 
 /**
- * Class Regex
- *
  * Regex matching and parsing for SemVer strings
  *
  * @package JTLShop\SemVer
@@ -15,15 +15,10 @@ class Regex
 {
     /**
      * Single SemVer expression
-     *
-     * @var string
      */
     private static string $versionStr = '/^(?<version>v?[0-9]+\.[0-9]+(?:\.[0-9]+)?)'
     . '(?<prerelease>-[0-9a-zA-Z.]+)?(?<build>\+[0-9a-zA-Z.]+)?$/';
 
-    /**
-     * @var string
-     */
     private static string $versionNum = '/^(?<version>(\d)(\d{2})(\d{1})?)$/';
 
     /**
@@ -36,8 +31,7 @@ class Regex
      *  - prerelease
      *  - build
      *
-     * @param string $string
-     * @return array[string]string
+     * @return array<int|string, string>
      * @throws InvalidArgumentException
      */
     public static function matchSemVer(string $string): array
@@ -59,7 +53,7 @@ class Regex
             );
 
             if (!$matchedNum) {
-                throw new InvalidArgumentException('"' . $string . '" is not a valid SemVer');
+                throw new InvalidArgumentException(\sprintf('"%s" is not a valid SemVer', $string));
             }
             $fullString = $matches[2] . '.' . $matches[3];
             if (isset($matches[4])) {

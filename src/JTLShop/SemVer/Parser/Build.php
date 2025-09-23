@@ -1,11 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace JTLShop\SemVer\Parser;
 
 use JTLShop\SemVer\Version\Build as BuildVersion;
 
 /**
- * Class Build
  * @package JTLShop\SemVer\Parser
  */
 class Build
@@ -14,19 +15,11 @@ class Build
      * Parse a build part string
      *
      * A build part can look like build.11.e0f985a
-     *
-     * @param string $string
-     * @return BuildVersion
      */
     public static function parse(string $string): BuildVersion
     {
-        // Explode over '.'
         $parts        = \explode('.', $string);
         $buildVersion = new BuildVersion();
-        // No parts is no build?
-        if (\count($parts) === 0) {
-            return $buildVersion;
-        }
         // Discard "build" string should it prepend the build
         if ($parts[0] === 'build') {
             \array_shift($parts);
