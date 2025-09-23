@@ -1,7 +1,5 @@
 # A decent SemVer library
 
-
-
 This library is a [SemVer](http://semver.org) parser written in PHP. It has a
 solid, fully tested OO API that makes it easy to work with SemVer versions.
 
@@ -73,7 +71,7 @@ Compare::smallerThan(
 
 ### Sorting
 
-There is a built in sorting method, that takes an arbitrary number of arguments
+There is a built in sorting method that takes an arbitrary number of arguments
 (either strings or Version instances) and returns an array, sorted in
 descending order of SemVer:
 

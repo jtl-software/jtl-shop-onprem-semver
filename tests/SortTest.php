@@ -1,19 +1,19 @@
-<?php declare(strict_types=1);
+<?php
 
+declare(strict_types=1);
+
+namespace JTLShop\SemVer\Tests;
+
+use InvalidArgumentException;
 use JTLShop\SemVer\Parser;
 use JTLShop\SemVer\Sort as Sorter;
 use PHPUnit\Framework\TestCase;
 
-/**
- * SortTest
- */
 class SortTest extends TestCase
 {
     /**
      * Test sort of strings
-     *
-     * @return void
-     **/
+     */
     public function testSortStrings(): void
     {
         $v1 = '2.0.2';
@@ -63,9 +63,7 @@ class SortTest extends TestCase
 
     /**
      * Test sort of array
-     *
-     * @return void
-     **/
+     */
     public function testSortArray(): void
     {
         $v1 = Parser::parse('2.0.2');
@@ -110,9 +108,7 @@ class SortTest extends TestCase
 
     /**
      * Test sort of array
-     *
-     * @return void
-     **/
+     */
     public function testSortInvalid(): void
     {
         $this->expectException(InvalidArgumentException::class);

@@ -1,11 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace JTLShop\SemVer;
 
 use InvalidArgumentException;
 
 /**
- * Class Sort
  * @package JTLShop\SemVer
  */
 class Sort
@@ -22,28 +23,21 @@ class Sort
      *
      * The result will be a sorted array of Versions, in ascending order
      *
-     * @param  array|string|Version $v1
-     * @param  string|Version       $v1
-     * ...
-     * @param  string|Version       $vn
-     * @return array[int]SemVer
+     * @return Version[]
      * @throws InvalidArgumentException
      */
-    public static function sort()
+    public static function sort(): array
     {
+        /** @var array<int, string|Version|array<string|Version>> $arguments */
         $arguments = \func_get_args();
 
         if (\count($arguments) === 0) {
             return [];
         }
         // If the first argument is an array, use that
-        if (\is_array($arguments[0])) {
-            $versions = $arguments[0];
-        } else {
-            $versions = $arguments;
-        }
-
-        // Parse into Version isntances
+        /** @var array<int, Version|string> $versions */
+        $versions = \is_array($arguments[0]) ? $arguments[0] : $arguments;
+        // Parse into Version instances
         foreach ($versions as $key => $version) {
             if ($version instanceof Version) {
                 $versions[$key] = $version;
@@ -54,7 +48,7 @@ class Sort
             }
         }
 
-        // Use the array sorter
+        /** @var array<int, Version> $versions */
         return self::sortArray($versions);
     }
 
@@ -65,7 +59,7 @@ class Sort
      *
      * This method uses QuickSort for the actual sorting
      *
-     * @param Version[] $versions
+     * @param array<int, Version> $versions
      * @return Version[]
      */
     public static function sortArray(array $versions): array

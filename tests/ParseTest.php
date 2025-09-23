@@ -1,19 +1,19 @@
-<?php declare(strict_types=1);
+<?php
 
+declare(strict_types=1);
+
+namespace JTLShop\SemVer\Tests;
+
+use InvalidArgumentException;
 use JTLShop\SemVer\Parser;
 use JTLShop\SemVer\Version;
 use PHPUnit\Framework\TestCase;
 
-/**
- * ParseTest
-**/
 class ParseTest extends TestCase
 {
     /**
      * Test parsing of versionable X.Y.Z
-     *
-     * @return void
-     **/
+     */
     public function testVersionable(): void
     {
         $v1 = Parser::parse('0.1.1-rc.1');
@@ -107,18 +107,13 @@ class ParseTest extends TestCase
             $v5->getPrefix(),
             'Prefix should parse'
         );
-        $this->assertEquals(
-            null,
-            $v5->getBuild(),
-            'Build should parse'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $v5->getBuild();
     }
 
     /**
      * Test pre release parser in greek form
-     *
-     * @return void
-     **/
+     */
     public function testPreReleaseGreek(): void
     {
         // Greek string
@@ -174,9 +169,7 @@ class ParseTest extends TestCase
 
     /**
      * Test pre release parser in greek form
-     *
-     * @return void
-     **/
+     */
     public function testPreReleaseVersionable(): void
     {
         $this->assertEquals(
@@ -199,9 +192,7 @@ class ParseTest extends TestCase
 
     /**
      * Test the detection of builds
-     *
-     * @return void
-     **/
+     */
     public function testBuildDetection(): void
     {
         $this->assertTrue(Parser::parse('0.0.1+build.1')->hasBuild());
@@ -213,7 +204,7 @@ class ParseTest extends TestCase
      * Test the build parser
      *
      * @return void
-     **/
+     */
     public function testBuildNumber(): void
     {
         $this->assertEquals(
@@ -232,32 +223,30 @@ class ParseTest extends TestCase
             12345,
             Parser::parse('0.0.1+build.12345.aaaaaa')->getBuild()->getNumber()
         );
-
     }
 
     /**
      * Test the parsing of remaining parts in the build version
-     *
-     * @return void
-     **/
+     */
     public function testBuildParts(): void
     {
         $this->assertContains(
-            'aaaaaa', Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
+            'aaaaaa',
+            Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
         );
         $this->assertContains(
-            'bbbbbb', Parser::parse('0.0.1+build.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
+            'bbbbbb',
+            Parser::parse('0.0.1+build.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
         );
         $this->assertContains(
-            'cccccc', Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
+            'cccccc',
+            Parser::parse('0.0.1+build.12345.aaaaaa.bbbbbb.cccccc')->getBuild()->getParts()
         );
     }
 
     /**
      * Test invalid version
-     *
-     * @return void
-     **/
+     */
     public function testInvalid1(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -266,9 +255,7 @@ class ParseTest extends TestCase
 
     /**
      * Test invalid version
-     *
-     * @return void
-     **/
+     */
     public function testInvalid2(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -277,9 +264,7 @@ class ParseTest extends TestCase
 
     /**
      * Test invalid version
-     *
-     * @return void
-     **/
+     */
     public function testInvalid3(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -288,9 +273,7 @@ class ParseTest extends TestCase
 
     /**
      * Test invalid version
-     *
-     * @return void
-     **/
+     */
     public function testInvalid4(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -299,9 +282,7 @@ class ParseTest extends TestCase
 
     /**
      * Test invalid version
-     *
-     * @return void
-     **/
+     */
     public function testInvalid5(): void
     {
         $this->expectException(InvalidArgumentException::class);
